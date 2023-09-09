@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -138,7 +139,7 @@ function SignUp() {
             }}
           >
             <Button variant="success" type="submit" style={{ width: "100vh" }}>
-              Sign Up
+              <Link to="/dashboard">Sign Up</Link>
             </Button>
           </div>
           <div
