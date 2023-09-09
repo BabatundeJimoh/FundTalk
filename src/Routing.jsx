@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./component/Home";
 import SignUp from "./component/SignUp";
 import Dashboard from "./component/Dashboard";
+
 function Routing() {
   return (
     <div>
