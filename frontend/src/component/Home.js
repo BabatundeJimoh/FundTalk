@@ -1,10 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 
 function Home() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {};
+
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isValid = validateForm();
+
+    if (isValid) {
+      // Form is valid, you can submit it or perform other actions here
+      console.log("Form data:", formData);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <>
       <Container fluid>
@@ -50,9 +96,10 @@ function Home() {
                 style={{
                   backgroundColor: "#f5f5f5",
                   width: "500px",
-                  height: "400px",
+                  height: "530px",
                   borderRadius: "8px",
                 }}
+                onSubmit={handleSubmit}
               >
                 <h2
                   style={{
@@ -68,9 +115,20 @@ function Home() {
                   <Form.Label></Form.Label>
                   <Form.Control
                     type="email"
+                    name="email"
                     placeholder="Enter email"
                     style={{ width: "300px", marginLeft: "90px" }}
+                    value={formData.email}
+                    onChange={handleInputChange}
                   />
+                  {errors.email && (
+                    <Form.Text
+                      className="text-danger"
+                      style={{ marginLeft: "100px" }}
+                    >
+                      {errors.email}
+                    </Form.Text>
+                  )}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -78,12 +136,24 @@ function Home() {
                   <Form.Control
                     type="password"
                     placeholder="Password"
+                    name="password"
                     style={{
                       width: "300px",
                       alignItems: "center",
+
                       marginLeft: "90px",
                     }}
+                    value={formData.password}
+                    onChange={handleInputChange}
                   />
+                  {errors.password && (
+                    <Form.Text
+                      className="text-danger"
+                      style={{ marginLeft: "100px" }}
+                    >
+                      {errors.password}
+                    </Form.Text>
+                  )}
                 </Form.Group>
 
                 <Button
