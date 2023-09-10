@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,6 +15,7 @@ function SignUp() {
   });
 
   const [errors, setErrors] = useState({});
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,11 +25,18 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm(formData);
+    const { name, email, password } = formData
     if (Object.keys(validationErrors).length === 0) {
-      // Form is valid, you can submit it here
+      try {
+         const { formData } = await axios.post('/register', { name, email, password })
+        setFormData({})
+        navigate('/')
+      } catch (error) {
+        console.log('Registration error:', error);
+      }
       console.log("Form is valid:", formData);
     } else {
       // Form has errors, set the errors state
@@ -139,7 +151,7 @@ function SignUp() {
             }}
           >
             <Button variant="success" type="submit" style={{ width: "100vh" }}>
-              <Link to="/dashboard">Sign Up</Link>
+              Sign Up
             </Button>
           </div>
           <div

@@ -70,7 +70,6 @@ function Home() {
                     type="email"
                     placeholder="Enter email"
                     style={{ width: "300px", marginLeft: "90px" }}
-                    Z
                   />
                 </Form.Group>
 
