@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { ToastContainer } from "react-bootstrap";
 
 
 function SignUp() {
@@ -64,7 +65,7 @@ function SignUp() {
         password: '',
         username: ''
       })
-      console.log("Form is valid:", formData);
+      // console.log("Form is valid:", formData);
     } else {
       // Form has errors, set the errors state
       setErrors(validationErrors);
@@ -270,6 +271,7 @@ function SignUp() {
           ;
         </div>
       </Form>
+      <ToastContainer />
     </div>
   );
 }

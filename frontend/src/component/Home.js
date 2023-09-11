@@ -4,7 +4,7 @@ import { Container, Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 function Home() {
   const navigate = useNavigate()
@@ -37,10 +37,12 @@ function Home() {
     return isValid;
   };
 
-  const handleError = (err) =>
+  const handleError = (err) => {
+    console.log(err);
     toast.error(err, {
       position: "bottom-left",
-    });
+    })
+  }
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-left",
@@ -49,13 +51,13 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
-    // const { email, password } = formData
 
     if (isValid) {
       try {
         const { data } = await axios.post('/login', 
           { ...formData }, {withCredentials: true} 
         )
+        // console.log("API Response:", data)
         const {success, message } = data
         if (success) {
           handleSuccess(message)
@@ -67,15 +69,14 @@ function Home() {
         }
         
       } catch (error) {
-        console.log('Registration error:', error);
+        console.log('Login error:', error);
       }
       setFormData({
         ...formData,
         email: '',
         password: ''
       })
-      // Form is valid, you can submit it or perform other actions here
-      console.log("Form data:", formData);
+      // console.log("Form data:", formData);
     }
   };
 
@@ -208,9 +209,11 @@ function Home() {
                 </Button>
               </Form>
             </div>
+            <ToastContainer />
           </Col>
         </Row>
       </Container>
+      
     </>
   );
 }
