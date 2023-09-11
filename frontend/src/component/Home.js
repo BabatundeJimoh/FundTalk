@@ -1,10 +1,14 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Home() {
+  const navigate = useNavigate()
+  
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,11 +37,43 @@ function Home() {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "bottom-left",
+    });
+  const handleSuccess = (msg) =>
+    toast.success(msg, {
+      position: "bottom-left",
+    });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
+    // const { email, password } = formData
 
     if (isValid) {
+      try {
+        const { data } = await axios.post('/login', 
+          { ...formData }, {withCredentials: true} 
+        )
+        const {success, message } = data
+        if (success) {
+          handleSuccess(message)
+          setTimeout(() => {
+            navigate('/dashboard')
+          }, 1000)
+        } else {
+          handleError(message)
+        }
+        
+      } catch (error) {
+        console.log('Registration error:', error);
+      }
+      setFormData({
+        ...formData,
+        email: '',
+        password: ''
+      })
       // Form is valid, you can submit it or perform other actions here
       console.log("Form data:", formData);
     }

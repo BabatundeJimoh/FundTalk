@@ -14,7 +14,8 @@ connectDatabase()
 
 server.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }))
 server.use(express.urlencoded({ extended: true }))
 server.use(express.json())
