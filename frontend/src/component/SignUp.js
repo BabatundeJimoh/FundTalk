@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 function SignUp() {
   const navigate = useNavigate()
@@ -25,18 +27,43 @@ function SignUp() {
     });
   };
 
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "bottom-left",
+    });
+  const handleSuccess = (msg) =>
+    toast.success(msg, {
+      position: "bottom-right",
+    });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm(formData);
-    const { name, email, password } = formData
+    // const { name, email, password } = formData
     if (Object.keys(validationErrors).length === 0) {
       try {
-         const { formData } = await axios.post('/register', { name, email, password })
-        setFormData({})
-        navigate('/')
+         const { data } = await axios.post('/register', 
+          { ...formData }, 
+          { withCredentials: true }
+        )
+        const { success, message } = data
+        if (success) {
+          handleSuccess(message)
+          setTimeout(() => {
+            navigate('/')
+          }, 1000)
+        } else {
+          handleError(message)
+        }
       } catch (error) {
         console.log('Registration error:', error);
       }
+      setFormData({
+        ...formData,
+        email: '',
+        password: '',
+        username: ''
+      })
       console.log("Form is valid:", formData);
     } else {
       // Form has errors, set the errors state

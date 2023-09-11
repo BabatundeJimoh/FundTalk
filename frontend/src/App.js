@@ -2,6 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Routing from "./Routing";
 import axios from 'axios'
+import 'react-toastify/dist/ReactToastify.css'
 
 axios.defaults.baseURL = 'http://localhost:3001'
 axios.defaults.withCredentials = true
