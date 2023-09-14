@@ -32,19 +32,25 @@ function Dashboard() {
                   aria-controls={`offcanvasNavbar-expand-${expand}`}
                 />
                 <Navbar.Offcanvas
-                  style={{ backgroundColor: "lavender" }}
+                  style={{ backgroundColor: "black" }}
                   id={`offcanvasNavbar-expand-${expand}`}
                   aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
                   placement="end"
                 >
-                  <Offcanvas.Header closeButton>
+                  <Offcanvas.Header
+                    closeButton
+                    style={{ backgroundColor: "white" }}
+                  >
                     <Offcanvas.Title
                       id={`offcanvasNavbarLabel-expand-${expand}`}
-                      style={{ backgroundColor: "lavender" }}
                     >
                       <Button
                         variant="dark"
-                        style={{ width: "320px", height: "60px" }}
+                        style={{
+                          width: "320px",
+                          height: "60px",
+                          backgroundColor: "black",
+                        }}
                       >
                         <i
                           class="bi bi-plus-square"
@@ -54,16 +60,19 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body style={{ backgroundColor: "lavender" }}>
+                  <Offcanvas.Body style={{ backgroundColor: "black" }}>
                     {/* Add your Offcanvas content here */}
                   </Offcanvas.Body>
-                  <hr></hr>
 
                   <Dropdown drop="up">
                     <Dropdown.Toggle
                       id="dropdown-basic"
                       variant="dark"
-                      style={{ width: "400px", height: "60px" }}
+                      style={{
+                        width: "400px",
+                        height: "70px",
+                        backgroundColor: "black",
+                      }}
                     >
                       See more
                     </Dropdown.Toggle>
