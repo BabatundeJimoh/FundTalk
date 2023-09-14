@@ -8,7 +8,6 @@ const MongoStore = require('connect-mongo')
 const session = require('express-session')
 const cors = require('cors')
 
-// const authRoute = require('./src/routes/auth')
 const connectDatabase = require('./src/config/database')
 connectDatabase()
 
