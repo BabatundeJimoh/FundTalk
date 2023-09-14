@@ -1,5 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
+const colors = require('colors')
 const uri = process.env.MONGODB_URI
 
 // mongoose.connect(uri)
@@ -10,9 +11,9 @@ const connectDatabase = async () => {
     try {
         mongoose.set('strictQuery', false)
         const connect = await mongoose.connect(uri)
-        console.log(`Database linked to ${connect.connection.host}`);
+        console.log(colors.bold.green(`Database linked to ${connect.connection.host}`));
     } catch (error) {
-        console.log(error);
+        console.log(colors.red(error));
     }
 }
 
