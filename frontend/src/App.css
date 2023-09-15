@@ -1,0 +1,11 @@
+.hide {
+    visibility: hidden;
+    display: none;
+}
+
+/* .user_msg{
+    text-align: right;
+    margin-left: 30%;
+    display: flex;
+    flex-direction: row-reverse;
+} */

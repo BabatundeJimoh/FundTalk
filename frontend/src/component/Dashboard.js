@@ -25,7 +25,7 @@ function Dashboard() {
   const [cookies, removeCookie] = useState([])
   const [username, setUsername] = useState('')
   const [message, setMessage] = useState("")
-  const [chats, setChats] = useState('')
+  const [chats, setChats] = useState([])
   const [isTyping, setIsTyping] = useState(false)
 
   // useEffect(() => {
@@ -66,20 +66,23 @@ function Dashboard() {
     setIsTyping(true)
     // scrollTo(0, 1e10)
 
-    let msgs = chats
-    msgs.push({ role: "user", content: message})
-    setChats(msgs)
-
-    setMessage("")
 
     try {
-      const response = await axios.post("/dashboard", { chats })
-      if(!response.ok) {
-        throw new Error("Network response was not ok")
+      let msgs = [...chats]
+      msgs.push({ role: "user", content: message})
+      setChats(msgs)
+      setMessage("")
+    
+      const response = await axios.post("/dashboard", { chats: msgs })
+      console.log("Response:", response);
+
+      if(response.status != 200) {
+        throw new Error(`Network response was not ok Status: ${response.status}`)
       }
-      const data = await response.json()
+      const data = response.data
       msgs.push(data.output)
       setChats(msgs)
+      console.log('Updated Chats:', msgs);
       setIsTyping(false)
       // scrollTo(0, 1e10)
     } catch (error) {
@@ -156,7 +159,7 @@ function Dashboard() {
                     >
                       <Dropdown.Item href="#/action-1">
                         <i
-                          class="bi bi-chat-left-dots"
+                          className="bi bi-chat-left-dots"
                           style={{ fontSize: "20px", marginRight: "30px" }}
                         ></i>
                         Custom Instructions
@@ -172,7 +175,7 @@ function Dashboard() {
                       <Dropdown.Item onClick={Logout}>
                         {" "}
                         <i
-                          class="bi bi-box-arrow-right"
+                          className="bi bi-box-arrow-right"
                           style={{ fontSize: "20px", marginRight: "30px" }}
                         ></i>
                         Log Out
@@ -267,7 +270,29 @@ function Dashboard() {
               marginTop: "30px",
             }}
           >
-            <Form action="" onSubmit={handleSubmit}>
+          <section>
+            {/* {chats && chats.length > 0 ? ( */}
+               { chats.map((chat, index) => (
+                  <p key={index} className={chat && chat.role === "user" ? "user_msg" : ""}>
+                    <span>
+                      <b>{ chat.role && chat.role.toUpperCase()}</b>
+                    </span>
+                    <span>:</span>
+                    <span>{chat.content}</span>
+                  </p>
+                ))}
+              
+              {chats.length === 0 && <p>No message to display</p>}
+              
+          </section>
+      
+            <div className={isTyping ? "" : "hide"}>
+              <p>
+                <i>{isTyping ? "Typing" : ""}</i>
+              </p>
+            </div>
+
+            <Form action="" onSubmit={(event) => handleSubmit(event, message)}>
             <InputGroup className="mb-3">
               <Form.Control
                 style={{ height: "55px" }}
@@ -280,7 +305,7 @@ function Dashboard() {
                 aria-describedby="basic-addon2"
               />
               <InputGroup.Text id="basic-addon2">
-                <i class="bi bi-send"></i>
+                <i className="bi bi-send"></i>
               </InputGroup.Text>
             </InputGroup>
             </Form>
@@ -292,7 +317,7 @@ function Dashboard() {
             </p>
           </div>
         </Row>
-        <i class="bi bi-question-circle" style={{ fontSize: "19px" }}></i>
+        <i className="bi bi-question-circle" style={{ fontSize: "19px" }}></i>
       </Container>
       <ToastContainer />
     </div>
