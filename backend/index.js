@@ -12,9 +12,9 @@ const connectDatabase = require('./src/config/database')
 connectDatabase()
 
 server.use(cors({
-    credentials: true,
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }))
 server.use(express.urlencoded({ extended: true }))
 server.use(express.json())

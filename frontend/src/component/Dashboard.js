@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -11,12 +11,83 @@ import Card from "react-bootstrap/Card";
 import logo from "../images/logo.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import InputGroup from "react-bootstrap/InputGroup";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 function Dashboard() {
-  const [show, setShow] = useState(false);
+  const navigate = useNavigate()
 
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [cookies, removeCookie] = useState([])
+  const [username, setUsername] = useState('')
+  const [message, setMessage] = useState("")
+  const [chats, setChats] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     if (!cookies.token) {
+  //       navigate('/')
+  //     }
+  //     const { data } = await axios.post('/', {}, { withCredentials: true })
+  //     const { status, user } = data
+  //     setUsername(user)
+  //     // if (status) {
+  //     //   toast(`Hello ${user}`, {position: "top-right"})
+  //     //   navigate('/dashboard')
+  //     // } else {
+  //     //   removeCookie("token");
+  //     //   navigate('/');
+  //     // }
+  //     return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
+  //   }
+  //   verifyCookie()
+  // }, [cookies, navigate, removeCookie])
+
+  const Logout = async () => {
+    try {
+      await axios.post("/logout");
+      removeCookie("token");
+      toast.success("logout successfully ");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async (event, message) => {
+    event.preventDefault()
+
+    if(!message) return;
+    setIsTyping(true)
+    // scrollTo(0, 1e10)
+
+    let msgs = chats
+    msgs.push({ role: "user", content: message})
+    setChats(msgs)
+
+    setMessage("")
+
+    try {
+      const response = await axios.post("/dashboard", { chats })
+      if(!response.ok) {
+        throw new Error("Network response was not ok")
+      }
+      const data = await response.json()
+      msgs.push(data.output)
+      setChats(msgs)
+      setIsTyping(false)
+      // scrollTo(0, 1e10)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
   return (
     <div>
       <Container
@@ -47,7 +118,7 @@ function Dashboard() {
                         style={{ width: "320px", height: "60px" }}
                       >
                         <i
-                          class="bi bi-plus-square"
+                          className="bi bi-plus-square"
                           style={{ marginRight: "10px" }}
                         ></i>
                         New Chat
@@ -89,7 +160,7 @@ function Dashboard() {
                         Settings
                       </Dropdown.Item>
                       <hr style={{ color: "black" }}></hr>
-                      <Dropdown.Item href="#/action-3">
+                      <Dropdown.Item onClick={Logout}>
                         {" "}
                         <i
                           class="bi bi-box-arrow-right"
@@ -187,9 +258,14 @@ function Dashboard() {
               marginTop: "30px",
             }}
           >
+            <Form action="" onSubmit={handleSubmit}>
             <InputGroup className="mb-3">
               <Form.Control
                 style={{ height: "55px" }}
+                type="text"
+                name="message"
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
                 placeholder="Write a messgae"
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
@@ -198,6 +274,7 @@ function Dashboard() {
                 <i class="bi bi-send"></i>
               </InputGroup.Text>
             </InputGroup>
+            </Form>
           </div>
           <div>
             <p style={{ fontSize: "11px", textAlign: "center" }}>
@@ -208,6 +285,7 @@ function Dashboard() {
         </Row>
         <i class="bi bi-question-circle" style={{ fontSize: "19px" }}></i>
       </Container>
+      <ToastContainer />
     </div>
   );
 }
