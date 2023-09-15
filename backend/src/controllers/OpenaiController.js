@@ -18,12 +18,6 @@ const chatbot = async (request, response) => {
                 {"role": "user", "content": "Where was it played?"},
                  ...chats,
             ],
-            // messages: [
-            //     { role: 'system', content: 'You are a rude assistant.' },
-            //     // { role: 'user', content: userInput },
-            //     // { role: 'assistant', content: 'Bitch do not be lazy, do some research.' }
-            //     ...chats,
-            // ],
         });
     
         response.json({
