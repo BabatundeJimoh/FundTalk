@@ -9,15 +9,25 @@ const chatbot = async (request, response) => {
 
     try {
         const { chats } = request.body;
+        const messages = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Who won the world series in 2020?"},
+            {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+            // {"role": "user", "content": "Where was it played?"},
+            // ...chats
+            //  ...chats.map(chat => ({ role: "user", content: chat }))
+            
+        ]
+
+        chats.forEach(chat => {
+            if (typeof chat === 'string') {
+              messages.push({ role: "user", content: chat });
+            }
+          })
+
         const result = await openAi.chat.completions.create({
             model: 'gpt-3.5-turbo',
-            messages: [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": "Who won the world series in 2020?"},
-                {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
-                {"role": "user", "content": "Where was it played?"},
-                 ...chats,
-            ],
+            messages:messages
         });
     
         response.json({

@@ -68,22 +68,34 @@ function Dashboard() {
 
 
     try {
-      let msgs = [...chats]
-      msgs.push({ role: "user", content: message})
-      setChats(msgs)
+      // let msgs = [...chats]
+      // msgs.push({ role: "user", content: message})
+      // setChats(msgs)
+      // setMessage("")
+
+      const userMessage = { role: "user", content: message }
+      const updatedChats = [...chats, userMessage]
+      setChats(updatedChats);
       setMessage("")
     
-      const response = await axios.post("/openai/chatbot", { chats: msgs })
+      const response = await axios.post("/openai/chatbot", { chats: updatedChats })
       console.log("Response:", response);
 
       if(response.status !== 200) {
         throw new Error(`Network response was not ok Status: ${response.status}`)
       }
-      const data = response.data
-      msgs.push(data.output)
-      setChats(msgs)
-      console.log('Updated Chats:', msgs);
+
+      const newMessage = { role: "assistant", content: response.data.output }
+      const updatedMessage = [...updatedChats, newMessage]
+      setChats(updatedMessage)
+      console.log('Updated Chats:', updatedMessage);
       setIsTyping(false)
+
+      // const data = response.data
+      // msgs.push(data.output)
+      // setChats(msgs)
+      // console.log('Updated Chats:', msgs);
+      // setIsTyping(false)
       // scrollTo(0, 1e10)
     } catch (error) {
       console.error(error)
@@ -262,7 +274,6 @@ function Dashboard() {
             }}
           >
           <section>
-            {/* {chats && chats.length > 0 ? ( */}
                { chats.map((chat, index) => (
                   <p key={index} className={chat && chat.role === "user" ? "user_msg" : ""}>
                     <span>
@@ -272,9 +283,7 @@ function Dashboard() {
                     <span>{chat.content}</span>
                   </p>
                 ))}
-              
               {chats.length === 0 && <p>No message to display</p>}
-              
           </section>
       
             <div className={isTyping ? "" : "hide"}>
