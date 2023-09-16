@@ -73,10 +73,10 @@ function Dashboard() {
       setChats(msgs)
       setMessage("")
     
-      const response = await axios.post("/dashboard", { chats: msgs })
+      const response = await axios.post("/openai/chatbot", { chats: msgs })
       console.log("Response:", response);
 
-      if(response.status != 200) {
+      if(response.status !== 200) {
         throw new Error(`Network response was not ok Status: ${response.status}`)
       }
       const data = response.data
