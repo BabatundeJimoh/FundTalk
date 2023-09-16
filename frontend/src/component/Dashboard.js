@@ -68,10 +68,7 @@ function Dashboard() {
 
 
     try {
-      // let msgs = [...chats]
-      // msgs.push({ role: "user", content: message})
-      // setChats(msgs)
-      // setMessage("")
+      
 
       const userMessage = { role: "user", content: message }
       const updatedChats = [...chats, userMessage]
@@ -90,12 +87,6 @@ function Dashboard() {
       setChats(updatedMessage)
       console.log('Updated Chats:', updatedMessage);
       setIsTyping(false)
-
-      // const data = response.data
-      // msgs.push(data.output)
-      // setChats(msgs)
-      // console.log('Updated Chats:', msgs);
-      // setIsTyping(false)
       // scrollTo(0, 1e10)
     } catch (error) {
       console.error(error)
