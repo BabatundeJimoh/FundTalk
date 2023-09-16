@@ -6,9 +6,11 @@
 const OpenAI = require('openai')
 require('dotenv').config()
 const aiKey = process.env.OPENAI_KEY
+const organisationKey = process.env.ORG_KEY
 
 const openAi = new OpenAI({
-    apiKey: aiKey
+    apiKey: aiKey,
+    organization: organisationKey
 })
 
 // const openAi = new OpenAIApi(configuration)
