@@ -16,17 +16,19 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 function Dashboard() {
-  const navigate = useNavigate()
+  const [appear, setAppear] = useState(true);
+
+  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [cookies, removeCookie] = useState([])
-  const [username, setUsername] = useState('')
-  const [message, setMessage] = useState("")
-  const [chats, setChats] = useState([])
-  const [isTyping, setIsTyping] = useState(false)
+  const [cookies, removeCookie] = useState([]);
+  const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
+  const [chats, setChats] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   // useEffect(() => {
   //   const verifyCookie = async () => {
@@ -60,16 +62,13 @@ function Dashboard() {
   };
 
   const handleSubmit = async (event, message) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    if(!message) return;
-    setIsTyping(true)
+    if (!message) return;
+    setIsTyping(true);
     // scrollTo(0, 1e10)
 
-
-    try {
-      
-
+    try {      
       const userMessage = { role: "user", content: message }
       const updatedChats = [...chats, userMessage]
       setChats(updatedChats);
@@ -78,8 +77,10 @@ function Dashboard() {
       const response = await axios.post("/openai/chatbot", { chats: updatedChats })
       console.log("Response:", response);
 
-      if(response.status !== 200) {
-        throw new Error(`Network response was not ok Status: ${response.status}`)
+      if (response.status !== 200) {
+        throw new Error(
+          `Network response was not ok Status: ${response.status}`
+        );
       }
 
       const newMessage = { role: "assistant", content: response.data.output }
@@ -87,12 +88,12 @@ function Dashboard() {
       setChats(updatedMessage)
       console.log('Updated Chats:', updatedMessage);
       setIsTyping(false)
+      
       // scrollTo(0, 1e10)
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-
+  };
 
   return (
     <div>
@@ -109,19 +110,25 @@ function Dashboard() {
                   aria-controls={`offcanvasNavbar-expand-${expand}`}
                 />
                 <Navbar.Offcanvas
-                  style={{ backgroundColor: "lavender" }}
+                  style={{ backgroundColor: "black" }}
                   id={`offcanvasNavbar-expand-${expand}`}
                   aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
                   placement="end"
                 >
-                  <Offcanvas.Header closeButton>
+                  <Offcanvas.Header
+                    closeButton
+                    style={{ backgroundColor: "white" }}
+                  >
                     <Offcanvas.Title
                       id={`offcanvasNavbarLabel-expand-${expand}`}
-                      style={{ backgroundColor: "lavender" }}
                     >
                       <Button
                         variant="dark"
-                        style={{ width: "320px", height: "60px" }}
+                        style={{
+                          width: "320px",
+                          height: "60px",
+                          backgroundColor: "black",
+                        }}
                       >
                         <i
                           className="bi bi-plus-square"
@@ -131,16 +138,19 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body style={{ backgroundColor: "lavender" }}>
+                  <Offcanvas.Body style={{ backgroundColor: "black" }}>
                     {/* Add your Offcanvas content here */}
                   </Offcanvas.Body>
-                  <hr></hr>
 
                   <Dropdown drop="up">
                     <Dropdown.Toggle
                       id="dropdown-basic"
                       variant="dark"
-                      style={{ width: "400px", height: "60px" }}
+                      style={{
+                        width: "400px",
+                        height: "70px",
+                        backgroundColor: "black",
+                      }}
                     >
                       See more
                     </Dropdown.Toggle>
@@ -181,81 +191,87 @@ function Dashboard() {
             </Navbar>
           ))}
         </Row>
-        <Row
-          style={{
-            textAlign: "center",
-            justifyContent: "center",
-            display: "flex",
-          }}
-        >
-          <img src={logo} style={{ height: "140px", width: "210px" }} />
-        </Row>
+        <>
+          {appear ? (
+            <div>
+              <Row
+                style={{
+                  textAlign: "center",
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+              >
+                <img src={logo} style={{ height: "140px", width: "210px" }} />
+              </Row>
+              <Row
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  marginTop: "80px",
+                  paddingBottom: "15px",
+                }}
+              >
+                <Card
+                  style={{
+                    width: "20rem",
+                    marginRight: "5px",
+                    backgroundColor: "lavender",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                    <Card.Text style={{ fontSize: "15px" }}>
+                      <b>Calender</b>
+                      <p>Good financial plan</p>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+                <Card
+                  style={{
+                    width: "20rem",
+                    backgroundColor: "lavender",
+                    marginLeft: "5px",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                    <Card.Text>
+                      <b>Financial advice</b>
+                      <p>It produces Financial advices </p>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Row>
+              <Row style={{ justifyContent: "center", display: "flex" }}>
+                <Card
+                  style={{
+                    width: "20rem",
+                    marginRight: "5px",
+                    backgroundColor: "lavender",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                    <Card.Text>Train to decline wrong request</Card.Text>
+                  </Card.Body>
+                </Card>{" "}
+                <Card
+                  style={{
+                    width: "20rem",
+                    backgroundColor: "lavender",
+                    marginLeft: "5px",
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                    <Card.Text>Limited knowledge </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Row>
+            </div>
+          ) : null}
+        </>
 
-        <Row
-          style={{
-            justifyContent: "center",
-            display: "flex",
-            marginTop: "80px",
-            paddingBottom: "15px",
-          }}
-        >
-          <Card
-            style={{
-              width: "20rem",
-              marginRight: "5px",
-              backgroundColor: "lavender",
-            }}
-          >
-            <Card.Body>
-              <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-              <Card.Text style={{ fontSize: "15px" }}>
-                <b>Calender</b>
-                <p>Good financial plan</p>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-          <Card
-            style={{
-              width: "20rem",
-              backgroundColor: "lavender",
-              marginLeft: "5px",
-            }}
-          >
-            <Card.Body>
-              <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-              <Card.Text>
-                <b>Financial advice</b>
-                <p>It produces Financial advices </p>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Row>
-        <Row style={{ justifyContent: "center", display: "flex" }}>
-          <Card
-            style={{
-              width: "20rem",
-              marginRight: "5px",
-              backgroundColor: "lavender",
-            }}
-          >
-            <Card.Body>
-              <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-              <Card.Text>Train to decline wrong request</Card.Text>
-            </Card.Body>
-          </Card>{" "}
-          <Card
-            style={{
-              width: "20rem",
-              backgroundColor: "lavender",
-              marginLeft: "5px",
-            }}
-          >
-            <Card.Body>
-              <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-              <Card.Text>Limited knowledge </Card.Text>
-            </Card.Body>
-          </Card>
-        </Row>
         <Row>
           <div
             style={{
@@ -264,6 +280,7 @@ function Dashboard() {
               marginTop: "30px",
             }}
           >
+          
           <section>
                { chats.map((chat, index) => (
                   <p key={index} className={chat && chat.role === "user" ? "user_msg" : ""}>
@@ -284,21 +301,24 @@ function Dashboard() {
             </div>
 
             <Form action="" onSubmit={(event) => handleSubmit(event, message)}>
-            <InputGroup className="mb-3">
-              <Form.Control
-                style={{ height: "55px" }}
-                type="text"
-                name="message"
-                value={message}
-                onChange={(event) => setMessage(event.target.value)}
-                placeholder="Write a messgae"
-                aria-label="Recipient's username"
-                aria-describedby="basic-addon2"
-              />
-              <InputGroup.Text id="basic-addon2">
-                <i className="bi bi-send"></i>
-              </InputGroup.Text>
-            </InputGroup>
+              <InputGroup className="mb-3">
+                <Form.Control
+                  style={{ height: "55px" }}
+                  type="text"
+                  name="message"
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  placeholder="Write a messgae"
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2"
+                />
+
+                <InputGroup.Text id="basic-addon2">
+                  <Button type="submit" onClick={() => setAppear(!appear)}>
+                    <i className="bi bi-send"></i>
+                  </Button>
+                </InputGroup.Text>
+              </InputGroup>
             </Form>
           </div>
           <div>
