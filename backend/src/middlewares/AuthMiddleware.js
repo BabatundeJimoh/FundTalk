@@ -19,6 +19,8 @@ const jwtSecret = process.env.JWT_SECRET
 
 module.exports.userVerification = (req, res) => {
     const token = req.cookies.token
+    console.log('Received token:', token);
+    console.log('jwtSecret:', jwtSecret);
     if (!token) {
       return res.json({ status: false })
     }

@@ -8,9 +8,9 @@ function Routing() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Home />} />
       </Routes>
     </div>
   );

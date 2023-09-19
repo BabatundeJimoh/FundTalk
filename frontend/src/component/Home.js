@@ -62,7 +62,7 @@ function Home() {
         if (success) {
           handleSuccess(message)
           setTimeout(() => {
-            navigate('/dashboard')
+            navigate('/')
           }, 1000)
         } else {
           handleError(message)
