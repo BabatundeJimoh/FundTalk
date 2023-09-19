@@ -76,9 +76,9 @@ function Dashboard() {
     setIsTyping(true);
     // scrollTo(0, 1e10)
 
-    try {      
-      const userMessage = { role: "user", content: message }
-      const updatedChats = [...chats, userMessage]
+    try {
+      const userMessage = { role: "user", content: message };
+      const updatedChats = [...chats, userMessage];
       setChats(updatedChats);
       setMessage("")
     
@@ -91,12 +91,12 @@ function Dashboard() {
         );
       }
 
-      const newMessage = { role: "assistant", content: response.data.output }
-      const updatedMessage = [...updatedChats, newMessage]
-      setChats(updatedMessage)
-      console.log('Updated Chats:', updatedMessage);
-      setIsTyping(false)
-      
+      const newMessage = { role: "assistant", content: response.data.output };
+      const updatedMessage = [...updatedChats, newMessage];
+      setChats(updatedMessage);
+      console.log("Updated Chats:", updatedMessage);
+      setIsTyping(false);
+
       // scrollTo(0, 1e10)
     } catch (error) {
       console.error(error);
@@ -295,20 +295,22 @@ function Dashboard() {
               marginTop: "30px",
             }}
           >
-          
-          <section>
-               { chats.map((chat, index) => (
-                  <p key={index} className={chat && chat.role === "user" ? "user_msg" : ""}>
-                    <span>
-                      <b>{ chat.role && chat.role.toUpperCase()}</b>
-                    </span>
-                    <span>:</span>
-                    <span>{chat.content}</span>
-                  </p>
-                ))}
+            <section>
+              {chats.map((chat, index) => (
+                <p
+                  key={index}
+                  className={chat && chat.role === "user" ? "user_msg" : ""}
+                >
+                  <span>
+                    <b>{chat.role && chat.role.toUpperCase()}</b>
+                  </span>
+                  <span>:</span>
+                  <span>{chat.content}</span>
+                </p>
+              ))}
               {chats.length === 0 && <p>No message to display</p>}
-          </section>
-      
+            </section>
+
             <div className={isTyping ? "" : "hide"}>
               <p>
                 <i>{isTyping ? "Typing" : ""}</i>
@@ -329,7 +331,7 @@ function Dashboard() {
                 />
 
                 <InputGroup.Text id="basic-addon2">
-                  <Button type="submit" onClick={() => setAppear(!appear)}>
+                  <Button type="submit" onClick={() => setAppear(false)}>
                     <i className="bi bi-send"></i>
                   </Button>
                 </InputGroup.Text>
@@ -343,7 +345,12 @@ function Dashboard() {
             </p>
           </div>
         </Row>
-        <i className="bi bi-question-circle" style={{ fontSize: "19px" }}></i>
+        <div style={{ position: " absolute", bottom: "10px", left: "10px" }}>
+          <i
+            className="bi bi-question-circle"
+            style={{ fontSize: "21px", color: "gray" }}
+          ></i>
+        </div>
       </Container>
       <ToastContainer />
     </div>
