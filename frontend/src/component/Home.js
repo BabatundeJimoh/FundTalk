@@ -7,8 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 function Home() {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -41,8 +41,8 @@ function Home() {
     console.log(err);
     toast.error(err, {
       position: "bottom-left",
-    })
-  }
+    });
+  };
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-left",
@@ -54,28 +54,29 @@ function Home() {
 
     if (isValid) {
       try {
-        const { data } = await axios.post('/login', 
-          { ...formData }, {withCredentials: true} 
-        )
+        const { data } = await axios.post(
+          "/login",
+          { ...formData },
+          { withCredentials: true }
+        );
         // console.log("API Response:", data)
-        const {success, message } = data
+        const { success, message } = data;
         if (success) {
-          handleSuccess(message)
+          handleSuccess(message);
           setTimeout(() => {
-            navigate('/')
-          }, 1000)
+            navigate("/");
+          }, 1000);
         } else {
-          handleError(message)
+          handleError(message);
         }
-        
       } catch (error) {
-        console.log('Login error:', error);
+        console.log("Login error:", error);
       }
       setFormData({
         ...formData,
-        email: '',
-        password: ''
-      })
+        email: "",
+        password: "",
+      });
       // console.log("Form data:", formData);
     }
   };
@@ -213,7 +214,6 @@ function Home() {
           </Col>
         </Row>
       </Container>
-      
     </>
   );
 }

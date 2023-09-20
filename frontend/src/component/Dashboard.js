@@ -30,35 +30,27 @@ function Dashboard() {
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Verifying cookies...");
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     if (!cookies.token) {
+  //       navigate('/')
+  //     }
+  //     const { data } = await axios.post('/', {}, { withCredentials: true })
+  //     const { status, user } = data
+  //     setUsername(user)
+  //     // if (status) {
+  //     //   toast(`Hello ${user}`, {position: "top-right"})
+  //     //   navigate('/dashboard')
+  //     // } else {
+  //     //   removeCookie("token");
+  //     //   navigate('/');
+  //     // }
+  //     return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
+  //   }
+  //   verifyCookie()
+  // }, [cookies, navigate, removeCookie])
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate('/login')
-      } else {
-        try {
-          const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
-          console.log("Server response:", data);
-
-          const { status, user } = data
-          setUsername(user)
-          return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-      
-      
-      
-    }
-    verifyCookie()
-  }, [cookies, navigate, removeCookie])
-
-  const handleLogout = async (event) => {
-    event.preventDefault()
+  const Logout = async () => {
     try {
       await axios.post("/logout");
       removeCookie("token");
@@ -80,9 +72,11 @@ function Dashboard() {
       const userMessage = { role: "user", content: message };
       const updatedChats = [...chats, userMessage];
       setChats(updatedChats);
-      setMessage("")
-    
-      const response = await axios.post("/chatbot", { chats: updatedChats })
+      setMessage("");
+
+      const response = await axios.post("/openai/chatbot", {
+        chats: updatedChats,
+      });
       console.log("Response:", response);
 
       if (response.status !== 200) {
@@ -107,11 +101,16 @@ function Dashboard() {
     <div>
       <Container
         fluid
-        style={{ height: "100vh", fontFamily: "monospace", fontSize: "15px" }}
+        style={{
+          fontFamily: "monospace",
+          fontSize: "15px",
+
+          /* Remove default padding for responsiveness */
+        }}
       >
         <Row>
           {["xxl"].map((expand) => (
-            <Navbar key={expand} expand={expand} className=" mb-3">
+            <Navbar key={expand} expand={expand} className="mb-3">
               <Container fluid>
                 <Navbar.Brand href="#"> </Navbar.Brand>
                 <Navbar.Toggle
@@ -133,9 +132,9 @@ function Dashboard() {
                       <Button
                         variant="dark"
                         style={{
-                          width: "320px",
+                          width: "100%" /* Full width for small screens */,
                           height: "60px",
-                          backgroundColor: "black",
+                          backgroundColor: "#40403f",
                         }}
                       >
                         <i
@@ -146,18 +145,27 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body style={{ backgroundColor: "black" }}>
+                  <Offcanvas.Body style={{ backgroundColor: "#40403f" }}>
                     {/* Add your Offcanvas content here */}
                   </Offcanvas.Body>
-
                   <Dropdown drop="up">
                     <Dropdown.Toggle
                       id="dropdown-basic"
                       variant="dark"
                       style={{
-                        width: "400px",
+                        width: "100%",
                         height: "70px",
-                        backgroundColor: "black",
+                        backgroundColor: "#40403f",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        boxShadow:
+                          "0px 4px 6px rgba(0, 0, 0, 0.1)" /* Drop shadow */,
+                        border: "none" /* Remove border */,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s ease",
                       }}
                     >
                       See more
@@ -166,36 +174,51 @@ function Dashboard() {
                     <Dropdown.Menu
                       style={{
                         width: "70vh",
-                        color: "white",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                        padding: "10px",
                       }}
                     >
-                      <Dropdown.Item href="#/action-1">
+                      <Dropdown.Item
+                        href="#/action-1"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
                         <i
                           className="bi bi-chat-left-dots"
-                          style={{ fontSize: "20px", marginRight: "30px" }}
+                          style={{ fontSize: "20px", marginRight: "10px" }}
                         ></i>
                         Custom Instructions
                       </Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
+                      <Dropdown.Item
+                        href="#/action-2"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
                         <i
-                          class="bi bi-gear"
-                          style={{ fontSize: "20px", marginRight: "30px" }}
+                          className="bi bi-gear"
+                          style={{ fontSize: "20px", marginRight: "10px" }}
                         ></i>
                         Settings
                       </Dropdown.Item>
-                      <Dropdown.Item>
+                      <Dropdown.Item
+                        href="#/action-3"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
                         <i
-                          className="bi bi-chat-left-dots"
-                          style={{ fontSize: "20px", marginRight: "30px" }}
+                          className="bi bi-person-circle"
+                          style={{ fontSize: "20px", marginRight: "10px" }}
                         ></i>
-                        {username}
+                        Person(EMAIL)
                       </Dropdown.Item>
-                      <hr style={{ color: "black" }}></hr>
-                      <Dropdown.Item onClick={(event) => handleLogout(event)}>
-                        {" "}
+
+                      <hr style={{ backgroundColor: "black" }}></hr>
+                      <Dropdown.Item
+                        onClick={Logout}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
                         <i
                           className="bi bi-box-arrow-right"
-                          style={{ fontSize: "20px", marginRight: "30px" }}
+                          style={{ fontSize: "20px", marginRight: "10px" }}
                         ></i>
                         Log Out
                       </Dropdown.Item>
@@ -216,25 +239,27 @@ function Dashboard() {
                   display: "flex",
                 }}
               >
-                <img src={logo} style={{ height: "140px", width: "210px" }} />
+                <img
+                  src={logo}
+                  style={{ height: "140px", width: "210px", maxWidth: "100%" }}
+                />
               </Row>
               <Row
                 style={{
                   justifyContent: "center",
                   display: "flex",
                   marginTop: "80px",
-                  paddingBottom: "15px",
                 }}
               >
                 <Card
+                  className="col-lg-4 col-md-6" /* Responsive card size */
                   style={{
-                    width: "20rem",
-                    marginRight: "5px",
                     backgroundColor: "lavender",
+                    width: "20rem",
+                    margin: "8px",
                   }}
                 >
                   <Card.Body>
-                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                     <Card.Text style={{ fontSize: "15px" }}>
                       <b>Calender</b>
                       <p>Good financial plan</p>
@@ -242,14 +267,14 @@ function Dashboard() {
                   </Card.Body>
                 </Card>
                 <Card
+                  className="col-lg-4 col-md-6" /* Responsive card size */
                   style={{
-                    width: "20rem",
                     backgroundColor: "lavender",
-                    marginLeft: "5px",
+                    width: "20rem",
+                    margin: "8px",
                   }}
                 >
                   <Card.Body>
-                    <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
                     <Card.Text>
                       <b>Financial advice</b>
                       <p>It produces Financial advices </p>
@@ -259,10 +284,11 @@ function Dashboard() {
               </Row>
               <Row style={{ justifyContent: "center", display: "flex" }}>
                 <Card
+                  className="col-lg-4 col-md-6" /* Responsive card size */
                   style={{
-                    width: "20rem",
-                    marginRight: "5px",
                     backgroundColor: "lavender",
+                    width: "20rem",
+                    margin: "8px",
                   }}
                 >
                   <Card.Body>
@@ -271,10 +297,11 @@ function Dashboard() {
                   </Card.Body>
                 </Card>{" "}
                 <Card
+                  className="col-lg-4 col-md-6" /* Responsive card size */
                   style={{
-                    width: "20rem",
                     backgroundColor: "lavender",
-                    marginLeft: "5px",
+                    width: "20rem",
+                    margin: "8px",
                   }}
                 >
                   <Card.Body>
@@ -290,9 +317,10 @@ function Dashboard() {
         <Row>
           <div
             style={{
-              paddingLeft: "300px",
-              paddingRight: "300px",
-              marginTop: "30px",
+              paddingLeft: "15px",
+              paddingRight: "15px",
+
+              width: "100%",
             }}
           >
             <section>
@@ -308,7 +336,18 @@ function Dashboard() {
                   <span>{chat.content}</span>
                 </p>
               ))}
-              {chats.length === 0 && <p>No message to display</p>}
+              {chats.length === 0 && (
+                <div
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                    marginTop: "22px",
+                  }}
+                >
+                  {" "}
+                </div>
+              )}
             </section>
 
             <div className={isTyping ? "" : "hide"}>
@@ -316,27 +355,37 @@ function Dashboard() {
                 <i>{isTyping ? "Typing" : ""}</i>
               </p>
             </div>
+            <div
+              style={{
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <Form
+                style={{ width: "700px" }}
+                action=""
+                onSubmit={(event) => handleSubmit(event, message)}
+              >
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    style={{ height: "55px" }}
+                    type="text"
+                    name="message"
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    placeholder="Write a message"
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
 
-            <Form action="" onSubmit={(event) => handleSubmit(event, message)}>
-              <InputGroup className="mb-3">
-                <Form.Control
-                  style={{ height: "55px" }}
-                  type="text"
-                  name="message"
-                  value={message}
-                  onChange={(event) => setMessage(event.target.value)}
-                  placeholder="Write a messgae"
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-
-                <InputGroup.Text id="basic-addon2">
-                  <Button type="submit" onClick={() => setAppear(false)}>
-                    <i className="bi bi-send"></i>
-                  </Button>
-                </InputGroup.Text>
-              </InputGroup>
-            </Form>
+                  <InputGroup.Text id="basic-addon2">
+                    <Button type="submit" onClick={() => setAppear(false)}>
+                      <i className="bi bi-send"></i>
+                    </Button>
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form>
+            </div>
           </div>
           <div>
             <p style={{ fontSize: "11px", textAlign: "center" }}>
@@ -345,12 +394,14 @@ function Dashboard() {
             </p>
           </div>
         </Row>
-        <div style={{ position: " absolute", bottom: "10px", left: "10px" }}>
-          <i
-            className="bi bi-question-circle"
-            style={{ fontSize: "21px", color: "gray" }}
-          ></i>
-        </div>
+        <Row style={{ bottom: "0" }}>
+          <Col>
+            <i
+              className="bi bi-question-circle"
+              style={{ fontSize: "23px" }}
+            ></i>
+          </Col>
+        </Row>
       </Container>
       <ToastContainer />
     </div>

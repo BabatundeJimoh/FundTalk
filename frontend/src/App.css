@@ -1,9 +1,7 @@
 .hide {
-    visibility: hidden;
-    display: none;
+  visibility: hidden;
+  display: none;
 }
-
-
 
 /* .user_msg{
     text-align: right;
