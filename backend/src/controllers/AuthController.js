@@ -19,7 +19,7 @@ const registerUser = async(request, response, next) => {
         const token = createSecretToken(user._id);
         response.cookie("token", token, {
             withCredentials: true,
-            httpOnly: false,
+            httpOnly: true,
         });
         response.status(201).json({ message: 'User Created Successfully', success: true, user})
         next()
@@ -55,7 +55,9 @@ const loginUser = async(request, response, next) => {
         const token = createSecretToken(user._id)
         response.cookie('token', token, {
             withCredentials: true, 
-            httpOnly: false
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
         })
 
         response.status(200).json({ message: 'Login successful', success: true, user})

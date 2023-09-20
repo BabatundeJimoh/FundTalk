@@ -30,32 +30,29 @@ function Dashboard() {
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Verifying cookies...");
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Verifying cookies...");
+  //     console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate('/login')
-      } else {
-        try {
-          const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
-          console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate('/login')
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
+  //         console.log("Server response:", data);
 
-          const { status, user } = data
-          setUsername(user)
-          return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-      
-      
-      
-    }
-    verifyCookie()
-  }, [cookies, navigate, removeCookie])
+  //         const { status, user } = data
+  //         setUsername(user)
+  //         return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   }
+  //   verifyCookie()
+  // }, [cookies, navigate, removeCookie])
 
   const handleLogout = async (event) => {
     event.preventDefault()
@@ -82,7 +79,7 @@ function Dashboard() {
       setChats(updatedChats);
       setMessage("")
     
-      const response = await axios.post("/chatbot", { chats: updatedChats })
+      const response = await axios.post("/openai/chatbot", { chats: updatedChats }, { withCredentials: true })
       console.log("Response:", response);
 
       if (response.status !== 200) {
