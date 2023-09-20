@@ -92,26 +92,27 @@ function Home() {
   return (
     <>
       <Container fluid>
-        <Row>
+        <Row className="align-items-center min-vh-100">
           <Col
-            md="5"
+            xs={12}
+            md={5}
             style={{
               backgroundColor: "black",
               color: "white",
-              justifyContent: "center",
-              display: "flex",
-              alignItems: "center",
               height: "100vh",
-              alignContent: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <div>
               <h3>
-                <b style={{ marginLeft: "40px" }}>New here?</b>
+                <b>New here?</b>
               </h3>
               <p>Create your new account here</p>
               <Link to="/signup">
-                <Button variant="warning" style={{ marginLeft: "60px" }}>
+                <Button variant="warning">
                   <b>SignUp</b>
                 </Button>
               </Link>
@@ -119,100 +120,84 @@ function Home() {
           </Col>
 
           <Col
-            md="7"
+            xs={12}
+            md={7}
             style={{
               color: "white",
-              justifyContent: "center",
+              minHeight: "100vh",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              height: "100vh",
-              alignContent: "center",
+              justifyContent: "center",
             }}
           >
-            <div>
-              <Form
-                style={{
-                  backgroundColor: "#f5f5f5",
-                  width: "500px",
-                  height: "530px",
-                  borderRadius: "8px",
-                }}
-                onSubmit={handleSubmit}
+            <Form
+              style={{
+                backgroundColor: "#f5f5f5",
+                maxWidth: "500px",
+                width: "90%",
+                padding: "20px",
+                borderRadius: "8px",
+              }}
+              onSubmit={handleSubmit}
+            >
+              <h2 style={{ color: "black", textAlign: "center" }}>
+                <b>Sign In</b>
+              </h2>
+              <br />
+              <Form.Group
+                controlId="formBasicEmail"
+                style={{ padding: "20px" }}
               >
-                <h2
-                  style={{
-                    color: "black",
-                    textAlign: "center",
-                    paddingTop: "50px",
-                  }}
-                >
-                  <b>Sign In</b>
-                </h2>
-                <br />
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label></Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    style={{ width: "300px", marginLeft: "90px" }}
-                    value={formData.email}
-                    onChange={handleInputChange}
-                  />
-                  {errors.email && (
-                    <Form.Text
-                      className="text-danger"
-                      style={{ marginLeft: "100px" }}
-                    >
-                      {errors.email}
-                    </Form.Text>
-                  )}
-                </Form.Group>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+                {errors.email && (
+                  <Form.Text className="text-danger">{errors.email}</Form.Text>
+                )}
+              </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label></Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    style={{
-                      width: "300px",
-                      alignItems: "center",
+              <Form.Group
+                controlId="formBasicPassword"
+                style={{ padding: "20px" }}
+              >
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+                {errors.password && (
+                  <Form.Text className="text-danger">
+                    {errors.password}
+                  </Form.Text>
+                )}
+              </Form.Group>
 
-                      marginLeft: "90px",
-                    }}
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  {errors.password && (
-                    <Form.Text
-                      className="text-danger"
-                      style={{ marginLeft: "100px" }}
-                    >
-                      {errors.password}
-                    </Form.Text>
-                  )}
-                </Form.Group>
-
-                <Button
-                  type="submit"
-                  style={{
-                    width: "250px",
-                    marginTop: "30px",
-                    marginLeft: "120px",
-                    alignItems: "center",
-                    height: "60px",
-                    backgroundColor: "black",
-                    color: "white",
-                  }}
-                >
-                  Submit
-                </Button>
-              </Form>
-            </div>
-            <ToastContainer />
+              <Button
+                type="submit"
+                style={{
+                  width: "92%",
+                  marginTop: "40px",
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "20px",
+                  marginLeft: "20px",
+                  marginRight: "20px",
+                  marginTop: "20px",
+                }}
+              >
+                Submit
+              </Button>
+            </Form>
           </Col>
         </Row>
+        <ToastContainer />
       </Container>
     </>
   );
