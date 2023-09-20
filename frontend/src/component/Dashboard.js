@@ -30,27 +30,30 @@ function Dashboard() {
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      if (!cookies.token) {
-        navigate("/");
-      }
-      const { data } = await axios.post("/", {}, { withCredentials: true });
-      const { status, user } = data;
-      setUsername(user);
-      if (status) {
-        toast(`Hello ${user}`, { position: "top-right" });
-        navigate("/dashboard");
-      } else {
-        removeCookie("token");
-        navigate("/");
-      }
-      return status
-        ? toast(`Hello ${user}`, { position: "top-right" })
-        : (removeCookie("token"), navigate("/"));
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Verifying cookies...");
+  //     console.log("Current cookies.token:", cookies.token);
+
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate('/login')
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
+  //         console.log("Server response:", data);
+
+  //         const { status, user } = data
+  //         setUsername(user)
+  //         return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   }
+  //   verifyCookie()
+  // }, [cookies, navigate, removeCookie])
+
 
   const Logout = async () => {
     try {
@@ -74,11 +77,10 @@ function Dashboard() {
       const userMessage = { role: "user", content: message };
       const updatedChats = [...chats, userMessage];
       setChats(updatedChats);
-      setMessage("");
+      setMessage("")
+    
+      const response = await axios.post("/openai/chatbot", { chats: updatedChats }, { withCredentials: true })
 
-      const response = await axios.post("/openai/chatbot", {
-        chats: updatedChats,
-      });
       console.log("Response:", response);
 
       if (response.status !== 200) {
