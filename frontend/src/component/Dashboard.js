@@ -30,25 +30,27 @@ function Dashboard() {
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  // useEffect(() => {
-  //   const verifyCookie = async () => {
-  //     if (!cookies.token) {
-  //       navigate('/')
-  //     }
-  //     const { data } = await axios.post('/', {}, { withCredentials: true })
-  //     const { status, user } = data
-  //     setUsername(user)
-  //     // if (status) {
-  //     //   toast(`Hello ${user}`, {position: "top-right"})
-  //     //   navigate('/dashboard')
-  //     // } else {
-  //     //   removeCookie("token");
-  //     //   navigate('/');
-  //     // }
-  //     return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
-  //   }
-  //   verifyCookie()
-  // }, [cookies, navigate, removeCookie])
+  useEffect(() => {
+    const verifyCookie = async () => {
+      if (!cookies.token) {
+        navigate("/");
+      }
+      const { data } = await axios.post("/", {}, { withCredentials: true });
+      const { status, user } = data;
+      setUsername(user);
+      if (status) {
+        toast(`Hello ${user}`, { position: "top-right" });
+        navigate("/dashboard");
+      } else {
+        removeCookie("token");
+        navigate("/");
+      }
+      return status
+        ? toast(`Hello ${user}`, { position: "top-right" })
+        : (removeCookie("token"), navigate("/"));
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
