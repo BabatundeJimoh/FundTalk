@@ -63,7 +63,7 @@ function SignUp() {
         ...formData,
         email: "",
         password: "",
-        username: "",
+        name: "",
       });
       // console.log("Form is valid:", formData);
     } else {
@@ -131,7 +131,7 @@ function SignUp() {
               paddingBottom: "25px",
             }}
           >
-            <Form.Control type="text" name="name" placeholder="Name" />
+            <Form.Control type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
           </Form.Group>
           <Form.Group
             controlId="formBasicEmail"
@@ -145,6 +145,8 @@ function SignUp() {
               type="email"
               name="email"
               placeholder="E-mail address"
+              value={formData.email}
+              onChange={handleChange}
             />
           </Form.Group>
           <Form.Group
@@ -159,6 +161,8 @@ function SignUp() {
               type="password"
               name="password"
               placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
             />
           </Form.Group>
           <p
