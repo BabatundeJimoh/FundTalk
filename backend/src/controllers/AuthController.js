@@ -6,9 +6,6 @@ const { createSecretToken } = require('../util/SecretToken')
 const registerUser = async(request, response, next) => {
     try {
         const { name, password, email } = request.body
-        // const newPassword = password
-        // const saltRounds = 10
-        // const hashedPassword = await bcrypt.hash(newPassword, saltRounds)
 
         const existingUser = await User.findOne({ $or: [{ email }, { name }] })
         if (existingUser) {
@@ -19,7 +16,7 @@ const registerUser = async(request, response, next) => {
         const token = createSecretToken(user._id);
         response.cookie("token", token, {
             withCredentials: true,
-            httpOnly: true,
+            httpOnly: false,
         });
         response.status(201).json({ message: 'User Created Successfully', success: true, user})
         next()
@@ -55,9 +52,7 @@ const loginUser = async(request, response, next) => {
         const token = createSecretToken(user._id)
         response.cookie('token', token, {
             withCredentials: true, 
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None'
+            httpOnly: false,
         })
 
         response.status(200).json({ message: 'Login successful', success: true, user})

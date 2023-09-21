@@ -14,6 +14,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { useCookies } from 'react-cookie'
 
 function Dashboard() {
   const [appear, setAppear] = useState(true);
@@ -24,43 +25,42 @@ function Dashboard() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [cookies, removeCookie] = useState([]);
+  const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  // useEffect(() => {
-  //   const verifyCookie = async () => {
-  //     console.log("Verifying cookies...");
-  //     console.log("Current cookies.token:", cookies.token);
+  useEffect(() => {
+    const verifyCookie = async () => {
+      console.log("Current cookies.token:", cookies.token);
 
-  //     if (!cookies.token) {
-  //       console.log("Token not found. Redirecting to login.");
-  //       navigate('/login')
-  //     } else {
-  //       try {
-  //         const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
-  //         console.log("Server response:", data);
+      if (!cookies.token) {
+        console.log("Token not found. Redirecting to login.");
+        navigate('/login')
+      } else {
+        try {
+          const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
+          console.log("Server response:", data);
 
-  //         const { status, user } = data
-  //         setUsername(user)
-  //         return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
-  //       } catch (error) {
-  //         console.error("Error verifying cookies:", error);
-  //       }
-  //     }
-  //   }
-  //   verifyCookie()
-  // }, [cookies, navigate, removeCookie])
+          const { status, user } = data
+          setUsername(user)
+          return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
+        } catch (error) {
+          console.error("Error verifying cookies:", error);
+        }
+      }
+    }
+    verifyCookie()
+  }, [cookies, navigate, removeCookie])
 
 
   const Logout = async () => {
     try {
-      await axios.post("/logout");
+      // await axios.post("/logout");
       removeCookie("token");
       toast.success("logout successfully ");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -212,7 +212,7 @@ function Dashboard() {
                           className="bi bi-person-circle"
                           style={{ fontSize: "20px", marginRight: "10px" }}
                         ></i>
-                        Person(EMAIL)
+                        {username}
                       </Dropdown.Item>
 
                       <hr style={{ backgroundColor: "black" }}></hr>

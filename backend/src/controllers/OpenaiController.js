@@ -7,18 +7,37 @@ const chatbot = async (request, response) => {
     
     try {
         const { chats } = request.body;
+
+        const messages = [
+            //   { "role": "system", "content": "You are a friendly assistant here to answer questions." },  
+            //   { "role": "user", "content": "Hi! How's your day going?" },  
+            //   { "role": "assistant", "content": "Hello! I'm here to help. My day is going well. How about yours?" }, 
+                // { role: 'system', content: 'You are a friendly assistant here to answer questions.' },
+                // { role: 'user', content: 'Tell me a joke.' },
+                // { role: 'user', content: "What's your favorite color?" },
+                // { role: 'user', content: 'Can you explain a scientific concept to me?' }
+
+                    // { role: 'system', content: 'You are a friendly assistant here to answer questions.' },
+                    // { role: 'user', content: 'Hi' },                    
+                    // { role: 'system', content: 'You are a financial advisor.' },
+                    // { role: 'user', content: 'Hi, I need financial advice. Can you help me with budgeting?' }, 
+                        { role: 'system', content: 'You are a financial advisor.' },
+                        // { role: 'user', content: 'Hi, I need assistance planning a budget.' },
+                        // { role: 'assistant', content: "Sure, I'd be happy to help you plan a budget. To get started, could you provide me with some information about your income and expenses?" },
+                        // { role: 'user', content: 'I earn $4,000 per month and have monthly expenses like rent, groceries, and utilities. How can I create a budget to save more?' },                                           
+        ];
        
-        // chats.forEach(chat => {
-        //     if (typeof chat === 'string') {
-        //       messages.push({ role: "user", content: chat });
-        //     }
-        //   })
+        chats.forEach(chat => {
+            if (typeof chat === 'string') {
+              messages.push({ role: "user", content: chat });
+            }
+          })
 
         const result = await openAi.chat.completions.create({
             model: 'gpt-3.5-turbo',
-            messages: [{ role: 'system', content: 'You are a helpful assistant' }],
-            temperature: 0.5,
-            max_tokens: 1024,
+            messages: messages,
+            temperature: 0.8,
+            // max_tokens: 1024,
         });
     
         response.json({
@@ -30,44 +49,5 @@ const chatbot = async (request, response) => {
     }
     
 }
-
-
-
-
-
-// const chatbot = async (req, res) => {
-//     try {
-//       const { chats } = req.body;
-  
-//       // Format messages for GPT-3 API
-//       const messages = chats.map((chat) => ({
-//         role: chat.role,
-//         content: chat.content,
-//       }));
-  
-//       // Request to the GPT-3 API
-//       const response = await axios.post(
-//         'https://api.openai.com/v1/engines/davinci-codex/completions',
-//         {
-//           messages,
-//           max_tokens: 50, // Adjust as needed
-//         },
-//         {
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${OPENAI_API_KEY}`,
-//           },
-//         }
-//       );
-  
-//       // Extract the assistant's reply
-//       const assistantReply = response.data.choices[0].message.content;
-  
-//       res.json({ output: assistantReply });
-//     } catch (error) {
-//       console.error('Error in chatbot route:', error);
-//       res.status(500).json({ error: 'An error occurred' });
-//     }
-//   };
 
   module.exports = chatbot
