@@ -43,7 +43,7 @@ function SignUp() {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const { data } = await axios.post(
-          "/register",
+          "/users/register",
           { ...formData },
           { withCredentials: true }
         );

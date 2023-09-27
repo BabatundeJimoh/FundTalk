@@ -55,7 +55,7 @@ function Home() {
     if (isValid) {
       try {
         const { data } = await axios.post(
-          "/login",
+          "/users/login",
           { ...formData },
           { withCredentials: true }
         );
