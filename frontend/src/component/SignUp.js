@@ -272,6 +272,7 @@ function SignUp() {
           </div>
         </div>
       </Form>
+      <ToastContainer />
     </Container>
   );
 }
