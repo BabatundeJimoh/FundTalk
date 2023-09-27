@@ -39,4 +39,4 @@ server.use(session({
 server.use('/', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
 
-server.listen(PORT, () => console.log(`Server is clean & live on Port ${PORT}`))
+server.listen(PORT, () => console.log(`The Server is clean & live on Port ${PORT}`))
