@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const server = express()
-const PORT = process.env.PORT || 3001 
+const PORT = process.env.PORT || 3000 
 
 const cookieParser = require('cookie-parser')
 const MongoStore = require('connect-mongo')
