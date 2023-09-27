@@ -12,11 +12,10 @@ const connectDatabase = require('./src/config/database')
 connectDatabase()
 
 server.use(cors({
-    origin: ['https://codetrain-fundtalk.netlify.app', 'http://localhost:3001'],
+    origin: ['https://codetrain-fundtalk.netlify.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }))
-
 server.use(express.urlencoded({ extended: true }))
 server.use(express.json())
 server.use(cookieParser())
@@ -33,6 +32,8 @@ server.use(session({
 server.get('/', (req, res) => {
   res.send('Fundtalk Server, nothing here!');
 });
+
+
 
 server.use('/users', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
