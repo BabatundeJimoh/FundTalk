@@ -50,7 +50,7 @@ function SignUp() {
         if (success) {
           handleSuccess(message);
           setTimeout(() => {
-            navigate("/login");
+            navigate("/");
           }, 1000);
         } else {
           handleError(message);

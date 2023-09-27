@@ -37,7 +37,7 @@ function Dashboard() {
 
       if (!cookies.token) {
         console.log("Token not found. Redirecting to login.");
-        navigate('/login')
+        navigate('/')
       } else {
         try {
           const { data } = await axios.post('https://fundtalk.onrender.com', {}, { withCredentials: true })
@@ -45,7 +45,7 @@ function Dashboard() {
 
           const { status, user } = data
           setUsername(user)
-          return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/login'))
+          return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
         } catch (error) {
           console.error("Error verifying cookies:", error);
         }
@@ -60,7 +60,7 @@ function Dashboard() {
       // await axios.post("/logout");
       removeCookie("token");
       toast.success("logout successfully ");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
