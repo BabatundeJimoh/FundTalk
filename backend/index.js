@@ -20,7 +20,7 @@ server.use(express.urlencoded({ extended: true }))
 server.use(express.json())
 server.use(cookieParser())
 server.use(session({
-    secret: "keyboard cat",
+    secret: process.env.JWT_SECRET,
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
