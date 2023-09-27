@@ -12,7 +12,7 @@ const connectDatabase = require('./src/config/database')
 connectDatabase()
 
 server.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['https://codetrain-fundtalk.netlify.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }))
@@ -27,6 +27,12 @@ server.use(session({
         mongoUrl: process.env.MONGODB_URI
     })
 }))
+
+
+server.get('/', (req, res) => {
+  res.send('Fundtalk Server, nothing here!');
+});
+
 
 
 server.use('/', require('./src/routes/authRoute'))

@@ -40,7 +40,7 @@ function Dashboard() {
         navigate('/login')
       } else {
         try {
-          const { data } = await axios.post('http://localhost:3001', {}, { withCredentials: true })
+          const { data } = await axios.post('https://fundtalk.onrender.com', {}, { withCredentials: true })
           console.log("Server response:", data);
 
           const { status, user } = data
