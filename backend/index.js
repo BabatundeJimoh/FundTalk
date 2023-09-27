@@ -28,13 +28,6 @@ server.use(session({
     })
 }))
 
-// server.use((req, res, next) => {
-//     res.cookie('connect.sid', req.cookies['connect.sid'], {
-//       sameSite: 'none',
-//       secure: true,
-//     });
-//     next();
-//   });
 
 server.use('/', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
