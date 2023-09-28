@@ -53,7 +53,7 @@ const loginUser = async(request, response, next) => {
         response.cookie('token', token, {
             sameSite: "None",
             secure: true,
-            domain: 'finalfundtalk.onrender.com', 
+            // domain: '.onrender.com', 
             withCredentials: true, 
             httpOnly: true,
         })
