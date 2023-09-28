@@ -43,6 +43,7 @@ server.get('/set-cookie', (req, res) => {
       domain: 'finalfundtalk.onrender.com',     
       httpOnly: true,   
     });
+    console.log('Cookie Set');
     res.send('Cookie set');
 });
 
