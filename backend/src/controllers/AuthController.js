@@ -53,6 +53,7 @@ const loginUser = async(request, response, next) => {
         response.cookie('token', token, {
             sameSite: "None",
             secure: true,
+            domain: '.onrender.com', 
             withCredentials: true, 
             httpOnly: false,
         })
