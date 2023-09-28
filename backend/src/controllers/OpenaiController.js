@@ -9,17 +9,8 @@ const chatbot = async (request, response) => {
         const { chats } = request.body;
 
         const messages = [
-            //   { "role": "system", "content": "You are a friendly assistant here to answer questions." },  
-            //   { "role": "user", "content": "Hi! How's your day going?" },  
-            //   { "role": "assistant", "content": "Hello! I'm here to help. My day is going well. How about yours?" }, 
-                // { role: 'system', content: 'You are a friendly assistant here to answer questions.' },
-                // { role: 'user', content: 'Tell me a joke.' },
-                // { role: 'user', content: "What's your favorite color?" },
-                // { role: 'user', content: 'Can you explain a scientific concept to me?' }
-
                     // { role: 'system', content: 'You are a friendly assistant here to answer questions.' },
                     // { role: 'user', content: 'Hi' },                    
-                    // { role: 'system', content: 'You are a financial advisor.' },
                     // { role: 'user', content: 'Hi, I need financial advice. Can you help me with budgeting?' }, 
                         { role: 'system', content: 'You are a financial advisor.' },
                         // { role: 'user', content: 'Hi, I need assistance planning a budget.' },
