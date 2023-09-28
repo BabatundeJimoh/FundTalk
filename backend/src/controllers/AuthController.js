@@ -15,8 +15,11 @@ const registerUser = async(request, response, next) => {
         const user = await User.create({ email, name, password })
         const token = createSecretToken(user._id);
         response.cookie("token", token, {
+            sameSite: 'None',
+            secure: true,
+            domain: 'finalfundtalk.onrender.com',
             withCredentials: true,
-            httpOnly: false,
+            httpOnly: true,
         });
         response.status(201).json({ message: 'User Created Successfully', success: true, user})
         next()
