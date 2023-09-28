@@ -59,6 +59,7 @@ const loginUser = async(request, response, next) => {
             domain: 'finalfundtalk.onrender.com', 
             withCredentials: true, 
             httpOnly: true,
+            path: '/'
         })
         console.log('Token set', token);
 
