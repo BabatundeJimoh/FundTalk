@@ -28,12 +28,17 @@ server.use(session({
     })
 }))
 
+server.use((req, res, next) => {
+    res.cookie('connect.sid', req.cookies['connect.sid'], {
+      sameSite: 'none',
+      secure: true,
+    });
+    next();
+  });
 
 server.get('/', (req, res) => {
   res.send('Fundtalk Server, nothing here!');
 });
-
-
 
 server.use('/users', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
