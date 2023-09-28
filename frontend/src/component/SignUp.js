@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-bootstrap";
 import { Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -117,7 +118,10 @@ function SignUp() {
             <h5>Create an account</h5>
             <div style={{ color: "blue" }}>
               <p style={{ fontSize: "14px" }}>
-                Already have an account? <b>Sign In</b>
+                Already have an account?
+                <Link to='/'>
+                  <b>Sign In</b>
+                </Link> 
               </p>
             </div>
           </div>
