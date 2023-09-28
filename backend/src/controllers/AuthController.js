@@ -52,6 +52,7 @@ const loginUser = async(request, response, next) => {
         const token = createSecretToken(user._id)
         response.cookie('token', token, {
             sameSite: "None",
+            secure: true,
             withCredentials: true, 
             httpOnly: false,
         })
