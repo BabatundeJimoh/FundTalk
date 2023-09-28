@@ -51,9 +51,11 @@ const loginUser = async(request, response, next) => {
 
         const token = createSecretToken(user._id)
         response.cookie('token', token, {
+            sameSite: "None",
             withCredentials: true, 
             httpOnly: false,
         })
+        console.log('Token set', token);
 
         response.status(200).json({ message: 'Login successful', success: true, user})
         next()
