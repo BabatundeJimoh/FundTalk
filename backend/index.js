@@ -39,7 +39,8 @@ server.use(session({
 server.get('/set-cookie', (req, res) => {
     res.cookie('token', process.env.JWT_SECRET, {
       sameSite: 'None',
-      secure: true,     
+      secure: true,
+      domain: '.onrender.com'     
     //   httpOnly: true,   
     });
     res.send('Cookie set');
