@@ -28,13 +28,22 @@ server.use(session({
     })
 }))
 
-server.use((req, res, next) => {
-    res.cookie('connect.sid', req.cookies['connect.sid'], {
+// server.use((req, res, next) => {
+//     res.cookie('connect.sid', req.cookies['connect.sid'], {
+//       sameSite: 'None',
+//       secure: true,
+//     });
+//     next();
+//   });
+
+server.get('/set-cookie', (req, res) => {
+    res.cookie('token', process.env.JWT_SECRET, {
       sameSite: 'None',
-      secure: true,
+      secure: true,     
+    //   httpOnly: true,   
     });
-    next();
-  });
+    res.send('Cookie set');
+});
 
 server.get('/', (req, res) => {
   res.send('Fundtalk Server, nothing here!');
