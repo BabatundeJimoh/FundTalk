@@ -30,7 +30,7 @@ server.use(session({
 
 server.use((req, res, next) => {
     res.cookie('connect.sid', req.cookies['connect.sid'], {
-      sameSite: 'none',
+      sameSite: 'None',
       secure: true,
     });
     next();
@@ -40,7 +40,7 @@ server.get('/', (req, res) => {
   res.send('Fundtalk Server, nothing here!');
 });
 
-server.use('/users', require('./src/routes/authRoute'))
+server.use('/', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
 
 server.listen(PORT, () => console.log(`The Server is clean & live on Port ${PORT}`))
