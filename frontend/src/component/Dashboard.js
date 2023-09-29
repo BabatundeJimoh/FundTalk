@@ -122,7 +122,7 @@ function Dashboard() {
         }}
       >
         <Row>
-          {["xxl"].map((expand) => (
+          {[""].map((expand) => (
             <Navbar key={expand} expand={expand} className="mb-3">
               <Container fluid>
                 <Navbar.Brand href="#"> </Navbar.Brand>
@@ -145,7 +145,7 @@ function Dashboard() {
                       <Button
                         variant="dark"
                         style={{
-                          width: "100%" /* Full width for small screens */,
+                          /* Full width for small screens */
                           height: "60px",
                           backgroundColor: "#40403f",
                         }}
@@ -165,15 +165,37 @@ function Dashboard() {
                     <Dropdown.Toggle
                       id="dropdown-basic"
                       variant="dark"
-                      className="w-100 h-70 bg-dark text-white rounded-4px shadow-none d-flex justify-content-center align-items-center cursor-pointer transition-bg-0.2s-ease"
+                      style={{
+                        width: "100%",
+                        height: "70px",
+                        backgroundColor: "#40403f",
+                        color: "#fff",
+                        borderRadius: "4px",
+                        boxShadow:
+                          "0px 4px 6px rgba(0, 0, 0, 0.1)" /* Drop shadow */,
+                        border: "none" /* Remove border */,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s ease",
+                      }}
                     >
                       See more
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className="w-70vh bg-white rounded-4px shadow">
+                    <Dropdown.Menu
+                      style={{
+                        width: "70vh",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                        padding: "10px",
+                      }}
+                    >
                       <Dropdown.Item
                         href="#/action-1"
-                        className="d-flex align-items-center"
+                        style={{ display: "flex", alignItems: "center" }}
                       >
                         <i
                           className="bi bi-chat-left-dots"
@@ -183,7 +205,7 @@ function Dashboard() {
                       </Dropdown.Item>
                       <Dropdown.Item
                         href="#/action-2"
-                        className="d-flex align-items-center"
+                        style={{ display: "flex", alignItems: "center" }}
                       >
                         <i
                           className="bi bi-gear"
@@ -193,7 +215,7 @@ function Dashboard() {
                       </Dropdown.Item>
                       <Dropdown.Item
                         href="#/action-3"
-                        className="d-flex align-items-center"
+                        style={{ display: "flex", alignItems: "center" }}
                       >
                         <i
                           className="bi bi-person-circle"
@@ -205,7 +227,7 @@ function Dashboard() {
                       <hr style={{ backgroundColor: "black" }}></hr>
                       <Dropdown.Item
                         onClick={Logout}
-                        className="d-flex align-items-center"
+                        style={{ display: "flex", alignItems: "center" }}
                       >
                         <i
                           className="bi bi-box-arrow-right"
