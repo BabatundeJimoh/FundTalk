@@ -14,7 +14,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { useCookies } from 'react-cookie'
+import { useCookies } from "react-cookie";
 
 function Dashboard() {
   const [appear, setAppear] = useState(true);
@@ -31,29 +31,34 @@ function Dashboard() {
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  // useEffect(() => {
-  //   const verifyCookie = async () => {
-  //     console.log("Current cookies.token:", cookies.token);
+  useEffect(() => {
+    const verifyCookie = async () => {
+      console.log("Current cookies.token:", cookies.token);
 
-  //     if (!cookies.token) {
-  //       console.log("Token not found. Redirecting to login.");
-  //       navigate('/')
-  //     } else {
-  //       try {
-  //         const { data } = await axios.post('https://fundtalk.onrender.com', {}, { withCredentials: true })
-  //         console.log("Server response:", data);
+      if (!cookies.token) {
+        console.log("Token not found. Redirecting to login.");
+        navigate("/");
+      } else {
+        try {
+          const { data } = await axios.post(
+            "https://fundtalk.onrender.com",
+            {},
+            { withCredentials: true }
+          );
+          console.log("Server response:", data);
 
-  //         const { status, user } = data
-  //         setUsername(user)
-  //         return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
-  //       } catch (error) {
-  //         console.error("Error verifying cookies:", error);
-  //       }
-  //     }
-  //   }
-  //   verifyCookie()
-  // }, [cookies, navigate, removeCookie])
-
+          const { status, user } = data;
+          setUsername(user);
+          return status
+            ? toast(`Hello ${user}`, { position: "top-right" })
+            : (removeCookie("token"), navigate("/"));
+        } catch (error) {
+          console.error("Error verifying cookies:", error);
+        }
+      }
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -77,9 +82,13 @@ function Dashboard() {
       const userMessage = { role: "user", content: message };
       const updatedChats = [...chats, userMessage];
       setChats(updatedChats);
-      setMessage("")
-    
-      const response = await axios.post("/openai/chatbot", { chats: updatedChats }, { withCredentials: true })
+      setMessage("");
+
+      const response = await axios.post(
+        "/openai/chatbot",
+        { chats: updatedChats },
+        { withCredentials: true }
+      );
 
       console.log("Response:", response);
 
@@ -156,37 +165,15 @@ function Dashboard() {
                     <Dropdown.Toggle
                       id="dropdown-basic"
                       variant="dark"
-                      style={{
-                        width: "100%",
-                        height: "70px",
-                        backgroundColor: "#40403f",
-                        color: "#fff",
-                        borderRadius: "4px",
-                        boxShadow:
-                          "0px 4px 6px rgba(0, 0, 0, 0.1)" /* Drop shadow */,
-                        border: "none" /* Remove border */,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        cursor: "pointer",
-                        transition: "background-color 0.2s ease",
-                      }}
+                      className="w-100 h-70 bg-dark text-white rounded-4px shadow-none d-flex justify-content-center align-items-center cursor-pointer transition-bg-0.2s-ease"
                     >
                       See more
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu
-                      style={{
-                        width: "70vh",
-                        backgroundColor: "#fff",
-                        borderRadius: "4px",
-                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                        padding: "10px",
-                      }}
-                    >
+                    <Dropdown.Menu className="w-70vh bg-white rounded-4px shadow">
                       <Dropdown.Item
                         href="#/action-1"
-                        style={{ display: "flex", alignItems: "center" }}
+                        className="d-flex align-items-center"
                       >
                         <i
                           className="bi bi-chat-left-dots"
@@ -196,7 +183,7 @@ function Dashboard() {
                       </Dropdown.Item>
                       <Dropdown.Item
                         href="#/action-2"
-                        style={{ display: "flex", alignItems: "center" }}
+                        className="d-flex align-items-center"
                       >
                         <i
                           className="bi bi-gear"
@@ -206,7 +193,7 @@ function Dashboard() {
                       </Dropdown.Item>
                       <Dropdown.Item
                         href="#/action-3"
-                        style={{ display: "flex", alignItems: "center" }}
+                        className="d-flex align-items-center"
                       >
                         <i
                           className="bi bi-person-circle"
@@ -218,7 +205,7 @@ function Dashboard() {
                       <hr style={{ backgroundColor: "black" }}></hr>
                       <Dropdown.Item
                         onClick={Logout}
-                        style={{ display: "flex", alignItems: "center" }}
+                        className="d-flex align-items-center"
                       >
                         <i
                           className="bi bi-box-arrow-right"
