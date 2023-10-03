@@ -33,34 +33,34 @@ function Dashboard() {
   const [isTyping, setIsTyping] = useState(false);
   const [mess, setMess] = useState(null)
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate("/");
-      } else {
-        try {
-          const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
-            {},
-            { withCredentials: true }
-          );
-          console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate("/");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           "https://fundtalk.onrender.com",
+  //           {},
+  //           { withCredentials: true }
+  //         );
+  //         console.log("Server response:", data);
 
-          const { status, user } = data;
-          setUsername(user);
-          return status
-            ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/"));
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  //         const { status, user } = data;
+  //         setUsername(user);
+  //         return status
+  //           ? toast(`Hello ${user}`, { position: "top-right" })
+  //           : (removeCookie("token"), navigate("/"));
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   };
+  //   verifyCookie();
+  // }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
