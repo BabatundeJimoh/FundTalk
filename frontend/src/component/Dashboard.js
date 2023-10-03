@@ -29,7 +29,9 @@ function Dashboard() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
+  const [currentTitle, setCurrentTitle] = useState(null)
   const [isTyping, setIsTyping] = useState(false);
+  const [mess, setMess] = useState(null)
 
   // useEffect(() => {
   //   const verifyCookie = async () => {
@@ -66,40 +68,65 @@ function Dashboard() {
     }
   };
 
-  const handleSubmit = async (event, message) => {
-    event.preventDefault();
+  const createNewChat = () => {
+   setMess(null)
+   setMessage("")
+   setCurrentTitle(null)
+  }
 
-    if (!message) return;
-    setIsTyping(true);
-    // scrollTo(0, 1e10)
+  const handleClick = (uniqueTitle) => {
+    setCurrentTitle(uniqueTitle)
+    setMess(null)
+    setMessage("")
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const requestData = {
+        message: message
+    };
 
     try {
-      const userMessage = { role: "user", content: message };
-      const updatedChats = [...chats, userMessage];
-      setChats(updatedChats);
-      setMessage("")
-    
-      const response = await axios.post("/openai/chatbot", { chats: updatedChats }, { withCredentials: true })
+        const response = await axios.post('http://localhost:4000/openai/chatbot', requestData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-      console.log("Response:", response);
-
-      if (response.status !== 200) {
-        throw new Error(
-          `Network response was not ok Status: ${response.status}`
-        );
-      }
-
-      const newMessage = { role: "assistant", content: response.data.output };
-      const updatedMessage = [...updatedChats, newMessage];
-      setChats(updatedMessage);
-      console.log("Updated Chats:", updatedMessage);
-      setIsTyping(false);
-
-      // scrollTo(0, 1e10)
+        const data = await response.data;
+        console.log(data);
+        setMess(data.choices[0].message);
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  };
+};
+
+  useEffect(() => {
+    // console.log(currentTitle, message, mess);
+    if(!currentTitle && message && mess){
+      setCurrentTitle(message)
+    }
+    if(currentTitle && message && mess){
+      setChats(chats => (
+        [...chats, 
+          {
+            title: currentTitle,
+            role: 'user',
+            content: message 
+          }, 
+          {
+            title: currentTitle,
+            role: mess.role,
+            content: mess.content
+          }
+        ]
+      ))
+    }
+
+  }, [mess, currentTitle])
+
+  const currentChat = chats.filter(chat => chat.title === currentTitle)
+  const uniqueTitles = Array.from(new Set(chats.map(chat => chat.title)))
 
   return (
     <div>
@@ -134,6 +161,7 @@ function Dashboard() {
                       id={`offcanvasNavbarLabel-expand-${expand}`}
                     >
                       <Button
+                        onClick={createNewChat}
                         variant="dark"
                         style={{
                           width: "100%" /* Full width for small screens */,
@@ -328,30 +356,15 @@ function Dashboard() {
             }}
           >
             <section>
-              {chats.map((chat, index) => (
-                <p
-                  key={index}
-                  className={chat && chat.role === "user" ? "user_msg" : ""}
-                >
-                  <span>
-                    <b>{chat.role && chat.role.toUpperCase()}</b>
-                  </span>
-                  <span>:</span>
-                  <span>{chat.content}</span>
-                </p>
-              ))}
-              {chats.length === 0 && (
-                <div
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                    marginTop: "22px",
-                  }}
-                >
-                  {" "}
-                </div>
-              )}
+                {currentChat?.map((chatMessage, index) => 
+                  <p key={index}>
+                    <span>
+                      <b>{chatMessage.role}</b>
+                    </span>
+                    <span> : </span>
+                    <span>{chatMessage.content}</span>
+                  </p>
+                )}
             </section>
 
             <div className={isTyping ? "" : "hide"}>
@@ -359,6 +372,7 @@ function Dashboard() {
                 <i>{isTyping ? "Typing" : ""}</i>
               </p>
             </div>
+
             <div
               style={{
                 justifyContent: "center",
@@ -368,7 +382,7 @@ function Dashboard() {
               <Form
                 style={{ width: "700px" }}
                 action=""
-                onSubmit={(event) => handleSubmit(event, message)}
+                onSubmit={handleSubmit}
               >
                 <InputGroup className="mb-3">
                   <Form.Control
