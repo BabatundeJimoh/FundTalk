@@ -14,7 +14,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { useCookies } from 'react-cookie'
+import { useCookies } from "react-cookie";
 
 function Dashboard() {
   const [appear, setAppear] = useState(true);
@@ -33,29 +33,34 @@ function Dashboard() {
   const [isTyping, setIsTyping] = useState(false);
   const [mess, setMess] = useState(null)
 
-  // useEffect(() => {
-  //   const verifyCookie = async () => {
-  //     console.log("Current cookies.token:", cookies.token);
+  useEffect(() => {
+    const verifyCookie = async () => {
+      console.log("Current cookies.token:", cookies.token);
 
-  //     if (!cookies.token) {
-  //       console.log("Token not found. Redirecting to login.");
-  //       navigate('/')
-  //     } else {
-  //       try {
-  //         const { data } = await axios.post('https://fundtalk.onrender.com', {}, { withCredentials: true })
-  //         console.log("Server response:", data);
+      if (!cookies.token) {
+        console.log("Token not found. Redirecting to login.");
+        navigate("/");
+      } else {
+        try {
+          const { data } = await axios.post(
+            "https://fundtalk.onrender.com",
+            {},
+            { withCredentials: true }
+          );
+          console.log("Server response:", data);
 
-  //         const { status, user } = data
-  //         setUsername(user)
-  //         return status ? toast(`Hello ${user}`, {position: "top-right"}) : (removeCookie("token"), navigate('/'))
-  //       } catch (error) {
-  //         console.error("Error verifying cookies:", error);
-  //       }
-  //     }
-  //   }
-  //   verifyCookie()
-  // }, [cookies, navigate, removeCookie])
-
+          const { status, user } = data;
+          setUsername(user);
+          return status
+            ? toast(`Hello ${user}`, { position: "top-right" })
+            : (removeCookie("token"), navigate("/"));
+        } catch (error) {
+          console.error("Error verifying cookies:", error);
+        }
+      }
+    };
+    verifyCookie();
+  }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -92,6 +97,7 @@ function Dashboard() {
                 'Content-Type': 'application/json'
             }
         });
+
 
         const data = await response.data;
         console.log(data);
@@ -140,7 +146,7 @@ function Dashboard() {
         }}
       >
         <Row>
-          {["xxl"].map((expand) => (
+          {[""].map((expand) => (
             <Navbar key={expand} expand={expand} className="mb-3">
               <Container fluid>
                 <Navbar.Brand href="#"> </Navbar.Brand>
@@ -164,7 +170,7 @@ function Dashboard() {
                         onClick={createNewChat}
                         variant="dark"
                         style={{
-                          width: "100%" /* Full width for small screens */,
+                          /* Full width for small screens */
                           height: "60px",
                           backgroundColor: "#40403f",
                         }}
