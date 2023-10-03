@@ -94,8 +94,9 @@ function Dashboard() {
         });
 
         const data = await response.data;
-        console.log(data);
+        // console.log(data);
         setMess(data.choices[0].message);
+        // setMessage("")
     } catch (error) {
         console.error(error);
     }
@@ -177,8 +178,15 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body style={{ backgroundColor: "#40403f" }}>
-                    {/* Add your Offcanvas content here */}
+                  <Offcanvas.Body className="text-white" style={{ backgroundColor: "#40403f" }}>
+                    {uniqueTitles?.map((uniqueTitle, index) => 
+                      <h2 
+                        key={index}
+                        style={{ cursor: "pointer" }} 
+                        onClick={() => handleClick(uniqueTitle)}>
+                          {uniqueTitle}
+                      </h2>
+                    )}
                   </Offcanvas.Body>
                   <Dropdown drop="up">
                     <Dropdown.Toggle
@@ -359,7 +367,7 @@ function Dashboard() {
                 {currentChat?.map((chatMessage, index) => 
                   <p key={index}>
                     <span>
-                      <b>{chatMessage.role}</b>
+                      <b>{chatMessage.role.toUpperCase()}</b>
                     </span>
                     <span> : </span>
                     <span>{chatMessage.content}</span>
