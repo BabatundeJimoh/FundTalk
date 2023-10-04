@@ -12,7 +12,11 @@ const connectDatabase = require('./src/config/database')
 connectDatabase()
 
 server.use(cors({
-    origin: ['https://finalfundtalk.onrender.com'],
+    origin: [
+        'http://localhost:3000',
+        'https://localhost:3000', 
+        'https://finalfundtalk.onrender.com'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }))
@@ -36,16 +40,16 @@ server.use(session({
 //     next();
 //   });
 
-server.get('/set-cookie', (req, res) => {
-    res.cookie('token', process.env.JWT_SECRET, {
-      sameSite: 'None',
-      secure: true,
-      domain: 'finalfundtalk.onrender.com',     
-      httpOnly: true,   
-    });
-    console.log('Cookie Set');
-    res.send('Cookie set');
-});
+// server.get('/set-cookie', (req, res) => {
+//     res.cookie('token', process.env.JWT_SECRET, {
+//       sameSite: 'None',
+//       secure: true,
+//       domain: 'finalfundtalk.onrender.com',     
+//       httpOnly: true,   
+//     });
+//     console.log('Cookie Set');
+//     res.send('Cookie set');
+// });
 
 server.get('/', (req, res) => {
   res.send('Fundtalk Server, nothing here!');
