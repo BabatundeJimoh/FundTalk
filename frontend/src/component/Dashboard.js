@@ -27,11 +27,11 @@ function Dashboard() {
 
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
-  const [message, setMessage] = useState("");
+  const [userInput, setUserInput] = useState("");
   const [chats, setChats] = useState([]);
   const [currentTitle, setCurrentTitle] = useState(null)
   const [isTyping, setIsTyping] = useState(false);
-  const [mess, setMess] = useState(null)
+  const [message, setMessage] = useState(null)
 
   // useEffect(() => {
   //   const verifyCookie = async () => {
@@ -74,21 +74,22 @@ function Dashboard() {
   };
 
   const createNewChat = () => {
-   setMess(null)
-   setMessage("")
+   setMessage(null)
+   setUserInput("")
    setCurrentTitle(null)
   }
 
   const handleClick = (uniqueTitle) => {
     setCurrentTitle(uniqueTitle)
-    setMess(null)
-    setMessage("")
+    setMessage(null)
+    setUserInput("")
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setIsTyping(true)
     const requestData = {
-        message: message
+        message: userInput
     };
 
     try {
@@ -100,37 +101,39 @@ function Dashboard() {
 
 
         const data = await response.data;
-        // console.log(data);
-        setMess(data.choices[0].message);
-        // setMessage("")
+        console.log(data);
+        setMessage(data.choices[0].message);
+        // setUserInput("")
+        setIsTyping(false)
     } catch (error) {
         console.error(error);
+        setIsTyping(false)
     }
 };
 
   useEffect(() => {
-    // console.log(currentTitle, message, mess);
-    if(!currentTitle && message && mess){
-      setCurrentTitle(message)
+    // console.log(currentTitle, message, message);
+    if(!currentTitle && userInput && message){
+      setCurrentTitle(userInput)
     }
-    if(currentTitle && message && mess){
+    if(currentTitle && userInput && message){
       setChats(chats => (
         [...chats, 
           {
             title: currentTitle,
             role: 'user',
-            content: message 
+            content: userInput 
           }, 
           {
             title: currentTitle,
-            role: mess.role,
-            content: mess.content
+            role: message.role,
+            content: message.content
           }
         ]
       ))
     }
 
-  }, [mess, currentTitle])
+  }, [message, currentTitle])
 
   const currentChat = chats.filter(chat => chat.title === currentTitle)
   const uniqueTitles = Array.from(new Set(chats.map(chat => chat.title)))
@@ -286,6 +289,7 @@ function Dashboard() {
                 }}
               >
                 <img
+                  alt="Fundtalk Logo"
                   src={logo}
                   style={{ height: "140px", width: "210px", maxWidth: "100%" }}
                 />
@@ -402,9 +406,8 @@ function Dashboard() {
                   <Form.Control
                     style={{ height: "55px" }}
                     type="text"
-                    name="message"
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
+                    value={userInput}
+                    onChange={(event) => setUserInput(event.target.value)}
                     placeholder="Write a message"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
