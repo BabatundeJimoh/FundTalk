@@ -33,34 +33,34 @@ function Dashboard() {
   const [isTyping, setIsTyping] = useState(false);
   const [message, setMessage] = useState(null)
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate("/");
-      } else {
-        try {
-          const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
-            {},
-            { withCredentials: true }
-          );
-          console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate("/");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           "https://fundtalk.onrender.com",
+  //           {},
+  //           { withCredentials: true }
+  //         );
+  //         console.log("Server response:", data);
 
-          const { status, user } = data;
-          setUsername(user);
-          return status
-            ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/"));
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  //         const { status, user } = data;
+  //         setUsername(user);
+  //         return status
+  //           ? toast(`Hello ${user}`, { position: "top-right" })
+  //           : (removeCookie("token"), navigate("/"));
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   };
+  //   verifyCookie();
+  // }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -105,8 +105,22 @@ function Dashboard() {
 
         const data = await response.data;
         console.log(data);
-        setMessage(data.choices[0].message);
-        // setUserInput("")
+        setUserInput("")
+        setChats((chats) => [
+          ...chats,
+          {
+            title: currentTitle,
+            role: "user",
+            content: userInput,
+          },
+          {
+            title: currentTitle,
+            role: data.choices[0].message.role,
+            content: data.choices[0].message.content,
+          },
+        ]);
+        // setMessage(data.choices[0].message);
+        
         setIsTyping(false)
     } catch (error) {
         console.error(error);

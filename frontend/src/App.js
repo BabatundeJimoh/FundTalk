@@ -8,15 +8,6 @@ axios.defaults.baseURL = "https://fundtalk.onrender.com";
 axios.defaults.withCredentials = true;
 
 function App() {
-  // const setBaseURL = () => {
-  //   if (process.env.NODE_ENV === 'production') {
-  //     axios.defaults.baseURL = 'https://fundtalk.onrender.com';
-  //   } else {
-  //     axios.defaults.baseURL = 'http://localhost:4000';
-  //   }
-  // };
-
-  // setBaseURL()
 
   return (
     <>
