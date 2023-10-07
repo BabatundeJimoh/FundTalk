@@ -377,7 +377,7 @@ function Dashboard() {
             </div>
           ) : (
             <>
-              <div
+              <div className="overflow-scroll"
                 style={{
                   backgroundColor: "gray",
                   color: "white",
@@ -387,7 +387,7 @@ function Dashboard() {
                   borderRadius: "20px",
                 }}
               >
-                <section>
+                <div>
                   {currentChat?.map((chatMessage, index) => 
                     <p key={index}>
                       <span>
@@ -407,7 +407,7 @@ function Dashboard() {
                       }}
                     ></div>
                   )}
-                </section>
+                </div>
                 <div className={isTyping ? "" : "hide"}>
                   <p>
                     <i>{isTyping ? "Typing" : ""}</i>
@@ -445,7 +445,7 @@ function Dashboard() {
                 action=""
                 onSubmit={handleSubmit}
               >
-                <InputGroup className="mb-3">
+                <InputGroup className="">
                   <Form.Control
                     style={{ height: "55px" }}
                     type="text"
