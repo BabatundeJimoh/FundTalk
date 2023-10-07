@@ -27,38 +27,39 @@ function Dashboard() {
 
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
-  const [message, setMessage] = useState("");
+  const [userInput, setUserInput] = useState("");
   const [chats, setChats] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [mess, setMess] = useState(null);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate("/");
-      } else {
-        try {
-          const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
-            {},
-            { withCredentials: true }
-          );
-          console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate("/");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           "https://fundtalk.onrender.com",
+  //           {},
+  //           { withCredentials: true }
+  //         );
+  //         console.log("Server response:", data);
 
-          const { status, user } = data;
-          setUsername(user);
-          return status
-            ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/"));
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  //         const { status, user } = data;
+  //         setUsername(user);
+  //         return status
+  //           ? toast(`Hello ${user}`, { position: "top-right" })
+  //           : (removeCookie("token"), navigate("/"));
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   };
+  //   verifyCookie();
+  // }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -71,44 +72,69 @@ function Dashboard() {
     }
   };
 
-  const handleSubmit = async (event, message) => {
-    event.preventDefault();
+  const createNewChat = () => {
+    setMess(null);
+    setMessage("");
+    setCurrentTitle(null);
+  };
 
-    if (!message) return;
-    setIsTyping(true);
-    // scrollTo(0, 1e10)
+  const handleClick = (uniqueTitle) => {
+    setCurrentTitle(uniqueTitle);
+    setMess(null);
+    setMessage("");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const requestData = {
+      message: message,
+    };
 
     try {
-      const userMessage = { role: "user", content: message };
-      const updatedChats = [...chats, userMessage];
-      setChats(updatedChats);
-      setMessage("");
-
       const response = await axios.post(
-        "/openai/chatbot",
-        { chats: updatedChats },
-        { withCredentials: true }
+        "http://localhost:4000/openai/chatbot",
+        requestData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      console.log("Response:", response);
-
-      if (response.status !== 200) {
-        throw new Error(
-          `Network response was not ok Status: ${response.status}`
-        );
-      }
-
-      const newMessage = { role: "assistant", content: response.data.output };
-      const updatedMessage = [...updatedChats, newMessage];
-      setChats(updatedMessage);
-      console.log("Updated Chats:", updatedMessage);
-      setIsTyping(false);
-
-      // scrollTo(0, 1e10)
+      const data = await response.data;
+      // console.log(data);
+      setMess(data.choices[0].message);
+      // setMessage("")
     } catch (error) {
       console.error(error);
+      setIsTyping(false);
     }
   };
+
+  useEffect(() => {
+    // console.log(currentTitle, message, mess);
+    if (!currentTitle && message && mess) {
+      setCurrentTitle(message);
+    }
+    if (currentTitle && message && mess) {
+      setChats((chats) => [
+        ...chats,
+        {
+          title: currentTitle,
+          role: "user",
+          content: message,
+        },
+        {
+          title: currentTitle,
+          role: mess.role,
+          content: mess.content,
+        },
+      ]);
+    }
+  }, [mess, currentTitle]);
+
+  const currentChat = chats.filter((chat) => chat.title === currentTitle);
+  const uniqueTitles = Array.from(new Set(chats.map((chat) => chat.title)));
 
   return (
     <div>
@@ -253,6 +279,7 @@ function Dashboard() {
                 }}
               >
                 <img
+                  alt="Fundtalk Logo"
                   src={logo}
                   style={{ height: "140px", width: "210px", maxWidth: "100%" }}
                 />
@@ -401,9 +428,8 @@ function Dashboard() {
                   <Form.Control
                     style={{ height: "55px" }}
                     type="text"
-                    name="message"
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
+                    value={userInput}
+                    onChange={(event) => setUserInput(event.target.value)}
                     placeholder="Write a message"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
