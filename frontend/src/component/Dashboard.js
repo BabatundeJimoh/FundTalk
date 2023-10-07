@@ -29,38 +29,36 @@ function Dashboard() {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [chats, setChats] = useState([]);
-  const [currentTitle, setCurrentTitle] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [mess, setMess] = useState(null);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate("/");
-      } else {
-        try {
-          const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
-            {},
-            { withCredentials: true }
-          );
-          console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate("/");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           "https://fundtalk.onrender.com",
+  //           {},
+  //           { withCredentials: true }
+  //         );
+  //         console.log("Server response:", data);
 
-          const { status, user } = data;
-          setUsername(user);
-          return status
-            ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/"));
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  //         const { status, user } = data;
+  //         setUsername(user);
+  //         return status
+  //           ? toast(`Hello ${user}`, { position: "top-right" })
+  //           : (removeCookie("token"), navigate("/"));
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   };
+  //   verifyCookie();
+  // }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -73,68 +71,44 @@ function Dashboard() {
     }
   };
 
-  const createNewChat = () => {
-    setMess(null);
-    setMessage("");
-    setCurrentTitle(null);
-  };
-
-  const handleClick = (uniqueTitle) => {
-    setCurrentTitle(uniqueTitle);
-    setMess(null);
-    setMessage("");
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, message) => {
     event.preventDefault();
-    const requestData = {
-      message: message,
-    };
+
+    if (!message) return;
+    setIsTyping(true);
+    // scrollTo(0, 1e10)
 
     try {
+      const userMessage = { role: "user", content: message };
+      const updatedChats = [...chats, userMessage];
+      setChats(updatedChats);
+      setMessage("");
+
       const response = await axios.post(
-        "http://localhost:4000/openai/chatbot",
-        requestData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        "/openai/chatbot",
+        { chats: updatedChats },
+        { withCredentials: true }
       );
 
-      const data = await response.data;
-      // console.log(data);
-      setMess(data.choices[0].message);
-      // setMessage("")
+      console.log("Response:", response);
+
+      if (response.status !== 200) {
+        throw new Error(
+          `Network response was not ok Status: ${response.status}`
+        );
+      }
+
+      const newMessage = { role: "assistant", content: response.data.output };
+      const updatedMessage = [...updatedChats, newMessage];
+      setChats(updatedMessage);
+      console.log("Updated Chats:", updatedMessage);
+      setIsTyping(false);
+
+      // scrollTo(0, 1e10)
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    // console.log(currentTitle, message, mess);
-    if (!currentTitle && message && mess) {
-      setCurrentTitle(message);
-    }
-    if (currentTitle && message && mess) {
-      setChats((chats) => [
-        ...chats,
-        {
-          title: currentTitle,
-          role: "user",
-          content: message,
-        },
-        {
-          title: currentTitle,
-          role: mess.role,
-          content: mess.content,
-        },
-      ]);
-    }
-  }, [mess, currentTitle]);
-
-  const currentChat = chats.filter((chat) => chat.title === currentTitle);
-  const uniqueTitles = Array.from(new Set(chats.map((chat) => chat.title)));
 
   return (
     <div>
@@ -169,7 +143,6 @@ function Dashboard() {
                       id={`offcanvasNavbarLabel-expand-${expand}`}
                     >
                       <Button
-                        onClick={createNewChat}
                         variant="dark"
                         style={{
                           /* Full width for small screens */
@@ -185,19 +158,8 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body
-                    className="text-white"
-                    style={{ backgroundColor: "#40403f" }}
-                  >
-                    {uniqueTitles?.map((uniqueTitle, index) => (
-                      <h2
-                        key={index}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleClick(uniqueTitle)}
-                      >
-                        {uniqueTitle}
-                      </h2>
-                    ))}
+                  <Offcanvas.Body style={{ backgroundColor: "#40403f" }}>
+                    {/* Add your Offcanvas content here */}
                   </Offcanvas.Body>
                   <Dropdown drop="up">
                     <Dropdown.Toggle
@@ -362,10 +324,60 @@ function Dashboard() {
                 </Card>
               </Row>
             </div>
-          ) : null}
+          ) : (
+            <>
+              <div
+                style={{
+                  backgroundColor: "gray",
+                  color: "white",
+                  padding: "40px",
+                  marginLeft: "200px",
+                  marginRight: "200px",
+                  borderRadius: "20px",
+                }}
+              >
+                <section>
+                  {chats.map((chat, index) => (
+                    <p
+                      key={index}
+                      className={chat && chat.role === "user" ? "user_msg" : ""}
+                    >
+                      <span>
+                        <b>{chat.role && chat.role.toUpperCase()}</b>
+                      </span>
+                      <span>:</span>
+                      <span>{chat.content}</span>
+                    </p>
+                  ))}
+                  {chats.length === 0 && (
+                    <div
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        display: "flex",
+                        marginTop: "22px",
+                      }}
+                    ></div>
+                  )}
+                </section>
+                <div className={isTyping ? "" : "hide"}>
+                  <p>
+                    <i>{isTyping ? "Typing" : ""}</i>
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </>
 
-        <Row>
+        <Row
+          className="fixed-bottom bg-white"
+          style={{
+            backgroundColor: "white",
+
+            // Adjust the value on large and larger screens
+          }}
+        >
           <div
             style={{
               paddingLeft: "15px",
@@ -374,24 +386,6 @@ function Dashboard() {
               width: "100%",
             }}
           >
-            <section>
-              {currentChat?.map((chatMessage, index) => (
-                <p key={index}>
-                  <span>
-                    <b>{chatMessage.role.toUpperCase()}</b>
-                  </span>
-                  <span> : </span>
-                  <span>{chatMessage.content}</span>
-                </p>
-              ))}
-            </section>
-
-            <div className={isTyping ? "" : "hide"}>
-              <p>
-                <i>{isTyping ? "Typing" : ""}</i>
-              </p>
-            </div>
-
             <div
               style={{
                 justifyContent: "center",
@@ -401,7 +395,7 @@ function Dashboard() {
               <Form
                 style={{ width: "700px" }}
                 action=""
-                onSubmit={handleSubmit}
+                onSubmit={(event) => handleSubmit(event, message)}
               >
                 <InputGroup className="mb-3">
                   <Form.Control
@@ -430,14 +424,15 @@ function Dashboard() {
               about people, places, or facts. FundTalk August 3 Version
             </p>
           </div>
-        </Row>
-        <Row style={{ bottom: "0" }}>
-          <Col>
-            <i
-              className="bi bi-question-circle"
-              style={{ fontSize: "23px" }}
-            ></i>
-          </Col>
+
+          <Row style={{ bottom: "0" }}>
+            <Col>
+              <i
+                className="bi bi-question-circle"
+                style={{ fontSize: "23px" }}
+              ></i>
+            </Col>
+          </Row>
         </Row>
       </Container>
       <ToastContainer />
