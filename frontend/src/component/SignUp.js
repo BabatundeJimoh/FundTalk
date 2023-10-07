@@ -42,7 +42,8 @@ function SignUp() {
     // const { name, email, password } = formData
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const { data } = await axios.post( "/register",
+        const { data } = await axios.post(
+          "/register",
           { ...formData },
           { withCredentials: true }
         );
@@ -119,9 +120,9 @@ function SignUp() {
             <div style={{ color: "blue" }}>
               <p style={{ fontSize: "14px" }}>
                 Already have an account?
-                <Link to='/'>
+                <Link to="/">
                   <b>Sign In</b>
-                </Link> 
+                </Link>
               </p>
             </div>
           </div>
@@ -133,7 +134,13 @@ function SignUp() {
               paddingBottom: "25px",
             }}
           >
-            <Form.Control type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
+            <Form.Control
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </Form.Group>
           <Form.Group
             controlId="formBasicEmail"
