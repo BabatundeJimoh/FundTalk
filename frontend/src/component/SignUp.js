@@ -51,7 +51,7 @@ function SignUp() {
         if (success) {
           handleSuccess(message);
           setTimeout(() => {
-            navigate("/");
+            navigate("/login");
           }, 1000);
         } else {
           handleError(message);
@@ -120,7 +120,7 @@ function SignUp() {
             <div style={{ color: "blue" }}>
               <p style={{ fontSize: "14px" }}>
                 Already have an account?
-                <Link to="/">
+                <Link to="/login">
                   <b>Sign In</b>
                 </Link>
               </p>

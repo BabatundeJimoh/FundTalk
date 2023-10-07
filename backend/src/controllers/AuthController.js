@@ -17,9 +17,9 @@ const registerUser = async(request, response, next) => {
         response.cookie("token", token, {
             sameSite: 'None',
             secure: true,
-            domain: 'finalfundtalk.onrender.com',
+            // domain: 'finalfundtalk.onrender.com',
             withCredentials: true,
-            httpOnly: true,
+            httpOnly: false,
         });
         response.status(201).json({ message: 'User Created Successfully', success: true, user})
         next()
@@ -56,12 +56,12 @@ const loginUser = async(request, response, next) => {
         response.cookie('token', token, {
             sameSite: "None",
             secure: true,
-            domain: 'finalfundtalk.onrender.com', 
+            // domain: 'finalfundtalk.onrender.com', 
             withCredentials: true, 
-            httpOnly: true,
-            path: '/'
+            httpOnly: false,
+            // path: '/'
         })
-        console.log('Token set', token);
+        // console.log('Token set', token);
 
         response.status(200).json({ message: 'Login successful', success: true, user})
         next()
