@@ -97,7 +97,7 @@ function Home() {
             xs={12}
             md={5}
             style={{
-              backgroundColor: "black",
+              backgroundColor: "#40403f",
               color: "white",
               height: "100vh",
               display: "flex",
@@ -112,8 +112,11 @@ function Home() {
               </h3>
               <p>Create your new account here</p>
               <Link to="/signup">
-                <Button variant="warning">
-                  <b>SignUp</b>
+                <Button
+                  variant="secondary"
+                  style={{ backgroundColor: "#47b2e4" }}
+                >
+                  SignUp
                 </Button>
               </Link>
             </div>
@@ -184,7 +187,7 @@ function Home() {
                 style={{
                   width: "92%",
                   marginTop: "40px",
-                  backgroundColor: "black",
+                  backgroundColor: "#47b2e4",
                   color: "white",
                   padding: "20px",
                   marginLeft: "20px",
