@@ -17,14 +17,12 @@ import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 
 function Dashboard() {
+  
   const [appear, setAppear] = useState(true);
-
   const navigate = useNavigate();
-
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
   const [userInput, setUserInput] = useState("");
@@ -101,10 +99,25 @@ function Dashboard() {
         }
       );
 
-      const data = await response.data;
-      // console.log(data);
-      setMess(data.choices[0].message);
-      // setMessage("")
+        const data = await response.data;
+        // console.log(data);
+        setUserInput("")
+        setChats((chats) => [
+          ...chats,
+          {
+            title: currentTitle,
+            role: "user",
+            content: userInput,
+          },
+          {
+            title: currentTitle,
+            role: data.choices[0].message.role,
+            content: data.choices[0].message.content,
+          },
+        ]);
+        // setMessage(data.choices[0].message);
+        
+        setIsTyping(false)
     } catch (error) {
       console.error(error);
       setIsTyping(false);
