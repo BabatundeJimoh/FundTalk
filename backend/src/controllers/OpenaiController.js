@@ -7,7 +7,11 @@ const chatbot = async(req, res) => {
     try {
         const requestData = {
             model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: req.body.message }],
+            messages: [ 
+                { role: "user", content: req.body.message },
+                { "role": "system", "content": "You are a highly intelligent financial bot. Respond to questions only about Financial stuff."},
+              ],
+            // messages: [{ role: "user", content: req.body.message }],
             max_tokens: 100,
         };
 
