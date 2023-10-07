@@ -37,11 +37,12 @@ function Dashboard() {
 
       if (!cookies.token) {
         console.log("Token not found. Redirecting to login.");
-        navigate("/");
+        navigate("/login");
       } else {
         try {
           const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
+            // "https://fundtalk.onrender.com",
+            'http://localhost:4000',
             {},
             { withCredentials: true }
           );
@@ -51,7 +52,7 @@ function Dashboard() {
           setUsername(user);
           return status
             ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/"));
+            : (removeCookie("token"), navigate("/login"));
         } catch (error) {
           console.error("Error verifying cookies:", error);
         }
@@ -72,21 +73,22 @@ function Dashboard() {
   };
 
   const createNewChat = () => {
-    setMess(null);
-    setMessage("");
+    setMessage(null);
+    setUserInput("");
     setCurrentTitle(null);
   };
 
   const handleClick = (uniqueTitle) => {
     setCurrentTitle(uniqueTitle);
-    setMess(null);
-    setMessage("");
+    setMessage(null);
+    setUserInput("");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsTyping(true)
     const requestData = {
-      message: message,
+      message: userInput,
     };
 
     try {
@@ -102,7 +104,7 @@ function Dashboard() {
 
         const data = await response.data;
         // console.log(data);
-        setUserInput("")
+        
         setChats((chats) => [
           ...chats,
           {
@@ -117,7 +119,7 @@ function Dashboard() {
           },
         ]);
         // setMessage(data.choices[0].message);
-        
+        setUserInput("")
         setIsTyping(false)
     } catch (error) {
       console.error(error);
@@ -127,25 +129,25 @@ function Dashboard() {
 
   useEffect(() => {
     // console.log(currentTitle, message, mess);
-    if (!currentTitle && message && mess) {
-      setCurrentTitle(message);
+    if (!currentTitle && userInput && message) {
+      setCurrentTitle(userInput);
     }
-    if (currentTitle && message && mess) {
+    if (currentTitle && userInput && message) {
       setChats((chats) => [
         ...chats,
         {
           title: currentTitle,
           role: "user",
-          content: message,
+          content: userInput,
         },
         {
           title: currentTitle,
-          role: mess.role,
-          content: mess.content,
+          role: message.role,
+          content: message.content,
         },
       ]);
     }
-  }, [mess, currentTitle]);
+  }, [message, currentTitle]);
 
   const currentChat = chats.filter((chat) => chat.title === currentTitle);
   const uniqueTitles = Array.from(new Set(chats.map((chat) => chat.title)));
@@ -182,7 +184,8 @@ function Dashboard() {
                     <Offcanvas.Title
                       id={`offcanvasNavbarLabel-expand-${expand}`}
                     >
-                      <Button
+                      <Button 
+                        onClick={createNewChat}
                         variant="dark"
                         style={{
                           /* Full width for small screens */
@@ -198,8 +201,15 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body style={{ backgroundColor: "#40403f" }}>
-                    {/* Add your Offcanvas content here */}
+                  <Offcanvas.Body className="" style={{ backgroundColor: "#40403f" }}>
+                    {uniqueTitles?.map((uniqueTitle, index) => 
+                      <h2 
+                        key={index}
+                        className="" 
+                        onClick={() => handleClick(uniqueTitle)}>
+                        {uniqueTitle}
+                      </h2>
+                    )}
                   </Offcanvas.Body>
                   <Dropdown drop="up">
                     <Dropdown.Toggle
@@ -378,19 +388,16 @@ function Dashboard() {
                 }}
               >
                 <section>
-                  {chats.map((chat, index) => (
-                    <p
-                      key={index}
-                      className={chat && chat.role === "user" ? "user_msg" : ""}
-                    >
+                  {currentChat?.map((chatMessage, index) => 
+                    <p key={index}>
                       <span>
-                        <b>{chat.role && chat.role.toUpperCase()}</b>
+                        <b>{chatMessage.role && chatMessage.role.toUpperCase()}</b>
                       </span>
                       <span>:</span>
-                      <span>{chat.content}</span>
+                      <span>{chatMessage.content}</span>
                     </p>
-                  ))}
-                  {chats.length === 0 && (
+                  )}
+                  {currentChat.length === 0 && (
                     <div
                       style={{
                         justifyContent: "center",
@@ -436,7 +443,7 @@ function Dashboard() {
               <Form
                 style={{ width: "700px" }}
                 action=""
-                onSubmit={(event) => handleSubmit(event, message)}
+                onSubmit={handleSubmit}
               >
                 <InputGroup className="mb-3">
                   <Form.Control
