@@ -17,18 +17,18 @@ import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 
 function Dashboard() {
-  
-  const [appear, setAppear] = useState(true);
-  const navigate = useNavigate();
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [cookies, removeCookie] = useCookies([]);
-  const [username, setUsername] = useState("");
-  const [userInput, setUserInput] = useState("");
+
+  const [appear, setAppear] = useState(true)
+  const navigate = useNavigate()
+  const [show, setShow] = useState(false)
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
+  const [cookies, removeCookie] = useCookies([])
+  const [username, setUsername] = useState("")
+  const [userInput, setUserInput] = useState("")
   const [chats, setChats] = useState([]);
-  const [currentTitle, setCurrentTitle] = useState(null);
-  const [isTyping, setIsTyping] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(null)
+  const [isTyping, setIsTyping] = useState(false)
   const [message, setMessage] = useState(null)
 
   // useEffect(() => {
