@@ -17,19 +17,18 @@ import { ToastContainer, toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 
 function Dashboard() {
-
-  const [appear, setAppear] = useState(true)
-  const navigate = useNavigate()
-  const [show, setShow] = useState(false)
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-  const [cookies, removeCookie] = useCookies([])
-  const [username, setUsername] = useState("")
-  const [userInput, setUserInput] = useState("")
+  const [appear, setAppear] = useState(true);
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [cookies, removeCookie] = useCookies([]);
+  const [username, setUsername] = useState("");
+  const [userInput, setUserInput] = useState("");
   const [chats, setChats] = useState([]);
-  const [currentTitle, setCurrentTitle] = useState(null)
-  const [isTyping, setIsTyping] = useState(false)
-  const [message, setMessage] = useState(null)
+  const [currentTitle, setCurrentTitle] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -42,7 +41,7 @@ function Dashboard() {
         try {
           const { data } = await axios.post(
             // "https://fundtalk.onrender.com",
-            'http://localhost:4000',
+            "http://localhost:4000",
             {},
             { withCredentials: true }
           );
@@ -86,7 +85,7 @@ function Dashboard() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsTyping(true)
+    setIsTyping(true);
     const requestData = {
       message: userInput,
     };
@@ -102,25 +101,25 @@ function Dashboard() {
         }
       );
 
-        const data = await response.data;
-        // console.log(data);
-        
-        setChats((chats) => [
-          ...chats,
-          {
-            title: currentTitle,
-            role: "user",
-            content: userInput,
-          },
-          {
-            title: currentTitle,
-            role: data.choices[0].message.role,
-            content: data.choices[0].message.content,
-          },
-        ]);
-        // setMessage(data.choices[0].message);
-        setUserInput("")
-        setIsTyping(false)
+      const data = await response.data;
+      // console.log(data);
+
+      setChats((chats) => [
+        ...chats,
+        {
+          title: currentTitle,
+          role: "user",
+          content: userInput,
+        },
+        {
+          title: currentTitle,
+          role: data.choices[0].message.role,
+          content: data.choices[0].message.content,
+        },
+      ]);
+      // setMessage(data.choices[0].message);
+      setUserInput("");
+      setIsTyping(false);
     } catch (error) {
       console.error(error);
       setIsTyping(false);
@@ -184,7 +183,7 @@ function Dashboard() {
                     <Offcanvas.Title
                       id={`offcanvasNavbarLabel-expand-${expand}`}
                     >
-                      <Button 
+                      <Button
                         onClick={createNewChat}
                         variant="dark"
                         style={{
@@ -201,15 +200,19 @@ function Dashboard() {
                       </Button>
                     </Offcanvas.Title>
                   </Offcanvas.Header>
-                  <Offcanvas.Body className="" style={{ backgroundColor: "#40403f" }}>
-                    {uniqueTitles?.map((uniqueTitle, index) => 
-                      <h2 
+                  <Offcanvas.Body
+                    className=""
+                    style={{ backgroundColor: "#40403f" }}
+                  >
+                    {uniqueTitles?.map((uniqueTitle, index) => (
+                      <h2
                         key={index}
-                        className="" 
-                        onClick={() => handleClick(uniqueTitle)}>
+                        className=""
+                        onClick={() => handleClick(uniqueTitle)}
+                      >
                         {uniqueTitle}
                       </h2>
-                    )}
+                    ))}
                   </Offcanvas.Body>
                   <Dropdown drop="up">
                     <Dropdown.Toggle
@@ -377,26 +380,31 @@ function Dashboard() {
             </div>
           ) : (
             <>
-              <div className="overflow-scroll"
+              <div
+                className=""
                 style={{
                   backgroundColor: "gray",
                   color: "white",
                   padding: "40px",
-                  marginLeft: "200px",
-                  marginRight: "200px",
+                  display: "flex",
+                  margin: "50px",
                   borderRadius: "20px",
+                  paddingBottom: "50px",
+                  marginBottom: "300px",
                 }}
               >
                 <div>
-                  {currentChat?.map((chatMessage, index) => 
+                  {currentChat?.map((chatMessage, index) => (
                     <p key={index}>
                       <span>
-                        <b>{chatMessage.role && chatMessage.role.toUpperCase()}</b>
+                        <b>
+                          {chatMessage.role && chatMessage.role.toUpperCase()}
+                        </b>
                       </span>
                       <span>:</span>
                       <span>{chatMessage.content}</span>
                     </p>
-                  )}
+                  ))}
                   {currentChat.length === 0 && (
                     <div
                       style={{
@@ -476,7 +484,7 @@ function Dashboard() {
             <Col>
               <i
                 className="bi bi-question-circle"
-                style={{ fontSize: "23px" }}
+                style={{ fontSize: "23px", paddingLeft: "3px" }}
               ></i>
             </Col>
           </Row>
