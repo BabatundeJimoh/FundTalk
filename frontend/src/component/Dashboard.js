@@ -32,7 +32,7 @@ function Dashboard() {
 
   useEffect(() => {
     const verifyCookie = async () => {
-      console.log("Current cookies.token:", cookies.token);
+      // console.log("Current cookies.token:", cookies.token);
 
       if (!cookies.token) {
         console.log("Token not found. Redirecting to login.");
@@ -40,12 +40,12 @@ function Dashboard() {
       } else {
         try {
           const { data } = await axios.post(
-            // "https://fundtalk.onrender.com",
-            "http://localhost:4000",
+            "https://fundtalk.onrender.com",
+            // "http://localhost:4000",
             {},
             { withCredentials: true }
           );
-          console.log("Server response:", data);
+          // console.log("Server response:", data);
 
           const { status, user } = data;
           setUsername(user);
@@ -83,6 +83,7 @@ function Dashboard() {
     setUserInput("");
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsTyping(true);
@@ -92,7 +93,8 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/openai/chatbot",
+        // "http://localhost:4000/openai/chatbot",
+        "/openai/chatbot",
         requestData,
         {
           headers: {
@@ -102,7 +104,17 @@ function Dashboard() {
       );
 
       const data = await response.data;
-      // console.log(data);
+      
+      // const stockResponse = await axios.get(`http://localhost:4000/polygon/stockdata?q=${userInput}`)
+      // const stockData = await stockResponse.data
+
+      // const stockResults = stockData.results.map((result, index) => (
+      //   <div key={index}>
+      //     <p>Close Price: {result.c}</p>
+      //     <p>High Price: {result.h}</p>
+      //     <p>Low Price: {result.l}</p>
+      //   </div>
+      // ));
 
       setChats((chats) => [
         ...chats,
@@ -116,6 +128,11 @@ function Dashboard() {
           role: data.choices[0].message.role,
           content: data.choices[0].message.content,
         },
+        // {
+        //   title: currentTitle,
+        //   role: "system",
+        //   content: stockResults,
+        // },
       ]);
       // setMessage(data.choices[0].message);
       setUserInput("");
@@ -125,6 +142,7 @@ function Dashboard() {
       setIsTyping(false);
     }
   };
+  
 
   useEffect(() => {
     // console.log(currentTitle, message, mess);
@@ -415,11 +433,11 @@ function Dashboard() {
                       }}
                     ></div>
                   )}
-                </div>
-                <div className={isTyping ? "" : "hide"}>
+                  <div className={isTyping ? "" : "hide"}>
                   <p>
                     <i>{isTyping ? "Typing" : ""}</i>
                   </p>
+                  </div>
                 </div>
               </div>
             </>
