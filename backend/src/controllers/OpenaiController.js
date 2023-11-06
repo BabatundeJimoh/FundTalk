@@ -1,7 +1,8 @@
+require('dotenv').config()
 const openAi = require('../config/openai.js')
 const colors = require('colors')
 const axios = require('axios')
-require('dotenv').config()
+
 
 const chatbot = async(req, res) => {
     try {

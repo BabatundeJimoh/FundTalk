@@ -57,5 +57,6 @@ server.get('/', (req, res) => {
 
 server.use('/', require('./src/routes/authRoute'))
 server.use('/openai', require('./src/routes/openaiRoute'))
+server.use('/polygon', require('./src/routes/polygonRoute'))
 
 server.listen(PORT, () => console.log(`The Server is clean & live on Port ${PORT}`))
