@@ -268,7 +268,7 @@ function SignUp() {
               }}
             >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/800px-Google_%22G%22_Logo.svg.png"
+                src="https://pbs.twimg.com/profile_images/1605297940242669568/q8-vPggS_400x400.jpg"
                 alt="Google"
                 style={{
                   width: "20px",
