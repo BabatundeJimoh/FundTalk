@@ -30,35 +30,35 @@ function Dashboard() {
   const [isTyping, setIsTyping] = useState(false);
   const [message, setMessage] = useState(null);
 
-  useEffect(() => {
-    const verifyCookie = async () => {
-      // console.log("Current cookies.token:", cookies.token);
+  // useEffect(() => {
+  //   const verifyCookie = async () => {
+  //     // console.log("Current cookies.token:", cookies.token);
 
-      if (!cookies.token) {
-        console.log("Token not found. Redirecting to login.");
-        navigate("/login");
-      } else {
-        try {
-          const { data } = await axios.post(
-            "https://fundtalk.onrender.com",
-            // "http://localhost:4000",
-            {},
-            { withCredentials: true }
-          );
-          // console.log("Server response:", data);
+  //     if (!cookies.token) {
+  //       console.log("Token not found. Redirecting to login.");
+  //       navigate("/login");
+  //     } else {
+  //       try {
+  //         const { data } = await axios.post(
+  //           "https://fundtalk.onrender.com",
+  //           // "http://localhost:4000",
+  //           {},
+  //           { withCredentials: true }
+  //         );
+  //         // console.log("Server response:", data);
 
-          const { status, user } = data;
-          setUsername(user);
-          return status
-            ? toast(`Hello ${user}`, { position: "top-right" })
-            : (removeCookie("token"), navigate("/login"));
-        } catch (error) {
-          console.error("Error verifying cookies:", error);
-        }
-      }
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+  //         const { status, user } = data;
+  //         setUsername(user);
+  //         return status
+  //           ? toast(`Hello ${user}`, { position: "top-right" })
+  //           : (removeCookie("token"), navigate("/login"));
+  //       } catch (error) {
+  //         console.error("Error verifying cookies:", error);
+  //       }
+  //     }
+  //   };
+  //   verifyCookie();
+  // }, [cookies, navigate, removeCookie]);
 
   const Logout = async () => {
     try {
@@ -83,7 +83,6 @@ function Dashboard() {
     setUserInput("");
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsTyping(true);
@@ -104,7 +103,7 @@ function Dashboard() {
       );
 
       const data = await response.data;
-      
+
       // const stockResponse = await axios.get(`http://localhost:4000/polygon/stockdata?q=${userInput}`)
       // const stockData = await stockResponse.data
 
@@ -142,7 +141,6 @@ function Dashboard() {
       setIsTyping(false);
     }
   };
-  
 
   useEffect(() => {
     // console.log(currentTitle, message, mess);
@@ -434,9 +432,9 @@ function Dashboard() {
                     ></div>
                   )}
                   <div className={isTyping ? "" : "hide"}>
-                  <p>
-                    <i>{isTyping ? "Typing" : ""}</i>
-                  </p>
+                    <p>
+                      <i>{isTyping ? "Typing" : ""}</i>
+                    </p>
                   </div>
                 </div>
               </div>
