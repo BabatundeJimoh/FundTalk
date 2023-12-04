@@ -189,19 +189,20 @@ function SignUp() {
               marginTop: "20px",
             }}
           >
-            <Button
-              variant="success"
-              type="submit"
-              style={{
-                width: "100%",
-                marginLeft: "50px",
-                marginRight: "50px",
-                marginBottom: "20px",
-                height: "60px",
-              }}
-            >
-              Sign Up
-            </Button>
+            <Link to="/dashboard">
+              <Button
+                variant="success"
+                type="submit"
+                style={{
+                  width: "250px",
+
+                  marginBottom: "20px",
+                  height: "60px",
+                }}
+              >
+                Sign Up
+              </Button>
+            </Link>
           </div>
           <div
             style={{
