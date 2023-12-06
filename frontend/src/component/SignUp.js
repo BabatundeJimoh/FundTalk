@@ -194,7 +194,7 @@ function SignUp() {
                 variant="success"
                 type="submit"
                 style={{
-                  width: "250px",
+                  width: "200px",
 
                   marginBottom: "20px",
                   height: "60px",
